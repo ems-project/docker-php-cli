@@ -42,7 +42,7 @@ RUN mkdir -p /home/default /opt/etc /opt/src /var/lock \
                                                 musl-libintl postgresql-dev libxml2-dev tidyhtml-dev \
     && docker-php-ext-configure gd --with-freetype --with-webp --with-jpeg \
     && docker-php-ext-configure tidy --with-tidy \
-    && docker-php-ext-install -j "$(nproc)" soap iconv bz2 fileinfo gettext intl pcntl pgsql \
+    && docker-php-ext-install -j "$(nproc)" soap bz2 fileinfo gettext intl pcntl pgsql \
                                             pdo_pgsql simplexml ldap gd ldap mysqli pdo_mysql \
                                             zip opcache bcmath exif tidy \
     && pecl install APCu-5.1.19 \
