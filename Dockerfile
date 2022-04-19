@@ -35,6 +35,8 @@ RUN mkdir -p /home/default /opt/etc /opt/src /var/lock \
     && chmod +x /usr/local/bin/apk-list \
                 /usr/local/bin/docker-php-entrypoint \
                 /usr/local/bin/wait-for-it \
+    && echo "Upgrade all already installed packages ..." \
+    && apk upgrade --available \
     && echo "Install and Configure required extra PHP packages ..." \
     && apk add --update --no-cache --virtual .build-deps $PHPIZE_DEPS autoconf freetype-dev icu-dev \
                                                 libjpeg-turbo-dev libpng-dev libwebp-dev libxpm-dev \
