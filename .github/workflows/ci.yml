@@ -167,15 +167,15 @@ jobs:
           tags: ${{ steps.meta_ghcr_phpcli_dev.outputs.tags }}
           labels: ${{ steps.meta_ghcr_phpcli_dev.outputs.labels }}
 
-      - name: Scan GHCR PHP-CLI Prod Docker Image
-        uses: azure/container-scan@v0
-        with:
-          image-name: "${{ steps.prep.outputs.ghcr_phpcli_prd_image }}:${{ env.CI_SHA_SHORT }}"
-
-      - name: Scan GHCR PHP-CLI Dev Docker Image
-        uses: azure/container-scan@v0
-        with:
-          image-name: "${{ steps.prep.outputs.ghcr_phpcli_dev_image }}:${{ env.CI_SHA_SHORT }}"
+#      - name: Scan GHCR PHP-CLI Prod Docker Image
+#        uses: azure/container-scan@v0
+#        with:
+#          image-name: "${{ steps.prep.outputs.ghcr_phpcli_prd_image }}:${{ env.CI_SHA_SHORT }}"
+#
+#      - name: Scan GHCR PHP-CLI Dev Docker Image
+#        uses: azure/container-scan@v0
+#        with:
+#          image-name: "${{ steps.prep.outputs.ghcr_phpcli_dev_image }}:${{ env.CI_SHA_SHORT }}"
 
       - name: Test PHP-CLI Prod Docker Image
         env:
