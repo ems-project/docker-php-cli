@@ -182,11 +182,11 @@ jobs:
       - name: Check DockerHub PHP-CLI Prod Docker Image
         if: github.event_name != 'pull_request'
         run: |
-          docker buildx imagetools inspect ${{ steps.prep.outputs.dh_phpcli_prd_image }}:${{ steps.meta_dh_phpcli_prd.outputs.version }}
-          docker pull ${{ steps.prep.outputs.dh_phpcli_prd_image }}:${{ steps.prep.outputs.version_major_minor_patch }}
+          docker buildx imagetools inspect ${{ steps.prep.outputs.dh_phpcli_prd_image }}:${{ steps.meta_dh_phpcli_prd.outputs.version }}-py2
+          docker pull ${{ steps.prep.outputs.dh_phpcli_prd_image }}:${{ steps.prep.outputs.version_major_minor_patch }}-py2
 
       - name: Check DockerHub PHP-CLI Dev Docker Image
         if: github.event_name != 'pull_request'
         run: |
-          docker buildx imagetools inspect ${{ steps.prep.outputs.dh_phpcli_dev_image }}:${{ steps.meta_dh_phpcli_dev.outputs.version }}
-          docker pull ${{ steps.prep.outputs.dh_phpcli_dev_image }}:${{ steps.prep.outputs.version_major_minor_patch }}
+          docker buildx imagetools inspect ${{ steps.prep.outputs.dh_phpcli_dev_image }}:${{ steps.meta_dh_phpcli_dev.outputs.version }}-py2
+          docker pull ${{ steps.prep.outputs.dh_phpcli_dev_image }}:${{ steps.prep.outputs.version_major_minor_patch }}-py2
