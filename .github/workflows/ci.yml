@@ -145,12 +145,6 @@ jobs:
         run: |
           bats -r test/tests.bats
 
-      - name: Check GHCR PHP-CLI Prod Docker Image
-        if: github.event_name != 'pull_request'
-        run: |
-          docker buildx imagetools inspect ${{ steps.prep.outputs.dh_phpcli_prd_image }}:${{ steps.meta_dh_phpcli_prd.outputs.version }}
-          docker buildx imagetools inspect ${{ steps.prep.outputs.dh_phpcli_dev_image }}:${{ steps.meta_dh_phpcli_dev.outputs.version }}
-
       - name: Push DockerHub PHP-CLI Docker Prod Image
         id: push_dh_phpcli_prod
         uses: docker/build-push-action@v3.1.0
