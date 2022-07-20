@@ -57,7 +57,7 @@ jobs:
 
       - name: Fill GHCR Docker Prod PHP-CLI Image metadata
         id: meta_ghcr_phpcli_prd
-        uses: crazy-max/ghaction-docker-meta@v3
+        uses: crazy-max/ghaction-docker-meta@v4
         with:
           images: "${{ steps.prep.outputs.ghcr_phpcli_prd_image }}"
           tags: |
@@ -70,7 +70,7 @@ jobs:
 
       - name: Fill GHCR Docker Dev PHP-CLI Image metadata
         id: meta_ghcr_phpcli_dev
-        uses: crazy-max/ghaction-docker-meta@v3
+        uses: crazy-max/ghaction-docker-meta@v4
         with:
           images: "${{ steps.prep.outputs.ghcr_phpcli_dev_image }}"
           tags: |
@@ -83,7 +83,7 @@ jobs:
 
       - name: Fill DockerHub Docker PHP-CLI Prod Image metadata
         id: meta_dh_phpcli_prd
-        uses: crazy-max/ghaction-docker-meta@v3
+        uses: crazy-max/ghaction-docker-meta@v4
         with:
           images: "${{ steps.prep.outputs.dh_phpcli_prd_image }}"
           tags: |
@@ -94,7 +94,7 @@ jobs:
 
       - name: Fill DockerHub Docker PHP-CLI Dev Image metadata
         id: meta_dh_phpcli_dev
-        uses: crazy-max/ghaction-docker-meta@v3
+        uses: crazy-max/ghaction-docker-meta@v4
         with:
           images: "${{ steps.prep.outputs.dh_phpcli_dev_image }}"
           tags: |
