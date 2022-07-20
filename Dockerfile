@@ -60,7 +60,9 @@ RUN mkdir -p /home/default /opt/etc /opt/src /var/lock \
     && apk add --update --upgrade --no-cache --virtual .ems-rundeps curl tzdata \
                                       bash tar gettext ssmtp postgresql-client postgresql-libs \
                                       libjpeg-turbo freetype libpng libwebp libxpm mailx coreutils \
-                                      mysql-client jq wget icu-libs libxml2 python2 groff tidyhtml \
+                                      mysql-client jq wget icu-libs libxml2 \
+#                                      python3 py3-pip \
+                                      groff tidyhtml \
     && cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
     && echo "Setup timezone ..." \
     && cp /usr/share/zoneinfo/Europe/Brussels /etc/localtime \
@@ -105,7 +107,7 @@ RUN echo "Install and Configure required extra PHP packages ..." \
        | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
        )" \
     && apk add --no-cache --virtual .php-dev-phpext-rundeps $runDeps \
-    && apk add --no-cache --virtual .php-dev-rundeps git npm patch \
+    && apk add --no-cache --virtual .php-dev-rundeps git npm patch python2 make g++ \
     && apk del .build-deps \
     && echo "Configure Xdebug ..." \
     && echo '[xdebug]' >> /usr/local/etc/php/conf.d/xdebug-default.ini \
