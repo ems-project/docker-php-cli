@@ -60,7 +60,7 @@ RUN mkdir -p /home/default /opt/etc /opt/src /var/lock \
     && apk add --update --upgrade --no-cache --virtual .ems-rundeps curl tzdata \
                                       bash tar gettext ssmtp postgresql-client postgresql-libs \
                                       libjpeg-turbo freetype libpng libwebp libxpm mailx coreutils \
-                                      mysql-client jq wget icu-libs libxml2 python3 py3-pip groff tidyhtml \
+                                      mysql-client jq wget icu-libs libxml2 python2 groff tidyhtml \
     && cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
     && echo "Setup timezone ..." \
     && cp /usr/share/zoneinfo/Europe/Brussels /etc/localtime \
@@ -73,12 +73,12 @@ RUN mkdir -p /home/default /opt/etc /opt/src /var/lock \
     && echo 'opcache.max_accelerated_files=4000' >> /usr/local/etc/php/conf.d/opcache-recommended.ini \
     && echo 'opcache.revalidate_freq=2' >> /usr/local/etc/php/conf.d/opcache-recommended.ini \
     && echo 'opcache.fast_shutdown=1' >> /usr/local/etc/php/conf.d/opcache-recommended.ini \
-    && echo "Download and install aws-cli ..." \
-    && mkdir -p /tmp/aws-cli \
-    && curl -sSfLk ${AWS_CLI_DOWNLOAD_URL}/${AWS_CLI_VERSION}.tar.gz | tar -xzC /tmp/aws-cli --strip-components=1 \
-    && cd /tmp/aws-cli \
-    && python3 setup.py install \
-    && cd /opt && rm -Rf /tmp/aws-cli \
+#    && echo "Download and install aws-cli ..." \
+#    && mkdir -p /tmp/aws-cli \
+#    && curl -sSfLk ${AWS_CLI_DOWNLOAD_URL}/${AWS_CLI_VERSION}.tar.gz | tar -xzC /tmp/aws-cli --strip-components=1 \
+#    && cd /tmp/aws-cli \
+#    && python3 setup.py install \
+#    && cd /opt && rm -Rf /tmp/aws-cli \
     && apk del .build-deps \
     && rm -rf /var/cache/apk/* \
     && echo "Setup permissions on filesystem for non-privileged user ..." \
