@@ -57,9 +57,9 @@ jobs:
         with:
           images: "${{ steps.prep.outputs.dh_phpcli_prd_image }}"
           tags: |
-            type=raw,value=${{ steps.prep.outputs.version_major_minor_patch }}-py2
-            type=raw,value=${{ steps.prep.outputs.version_major_minor }}-py2
-            type=raw,value=${{ steps.prep.outputs.version_major }}-py2
+            type=raw,value=${{ steps.prep.outputs.version_major_minor_patch }}-py2-node${{ env.NODE_VERSION }}
+            type=raw,value=${{ steps.prep.outputs.version_major_minor }}-py2-node${{ env.NODE_VERSION }}
+            type=raw,value=${{ steps.prep.outputs.version_major }}-py2-node${{ env.NODE_VERSION }}
             type=raw,value=latest
 
       - name: Fill DockerHub Docker PHP-CLI Dev Image metadata
@@ -68,9 +68,9 @@ jobs:
         with:
           images: "${{ steps.prep.outputs.dh_phpcli_dev_image }}"
           tags: |
-            type=raw,value=${{ steps.prep.outputs.version_major_minor_patch }}-py2
-            type=raw,value=${{ steps.prep.outputs.version_major_minor }}-py2
-            type=raw,value=${{ steps.prep.outputs.version_major }}-py2
+            type=raw,value=${{ steps.prep.outputs.version_major_minor_patch }}-py2-node${{ env.NODE_VERSION }}
+            type=raw,value=${{ steps.prep.outputs.version_major_minor }}-py2-node${{ env.NODE_VERSION }}
+            type=raw,value=${{ steps.prep.outputs.version_major }}-py2-node${{ env.NODE_VERSION }}
             type=raw,value=latest
 
       - name: Login to DockerHub
@@ -103,6 +103,7 @@ jobs:
           target: php-cli-prod
           build-args: |
             VERSION_ARG=${{ env.PHP_VERSION }}
+            NODE_VERSION_ARG=${{ env.NODE_VERSION }}
             RELEASE_ARG=${{ env.CI_RUN_ID }}
             VCS_REF_ARG=${{ env.CI_SHA }}
             BUILD_DATE_ARG=${{ steps.prep.outputs.build_date }}
@@ -121,6 +122,7 @@ jobs:
           target: php-cli-dev
           build-args: |
             VERSION_ARG=${{ env.PHP_VERSION }}
+            NODE_VERSION_ARG=${{ env.NODE_VERSION }}
             RELEASE_ARG=${{ env.CI_RUN_ID }}
             VCS_REF_ARG=${{ env.CI_SHA }}
             BUILD_DATE_ARG=${{ steps.prep.outputs.build_date }}
@@ -155,6 +157,7 @@ jobs:
           target: php-cli-prod
           build-args: |
             VERSION_ARG=${{ env.PHP_VERSION }}
+            NODE_VERSION_ARG=${{ env.NODE_VERSION }}
             RELEASE_ARG=${{ env.CI_RUN_ID }}
             VCS_REF_ARG=${{ env.CI_SHA }}
             BUILD_DATE_ARG=${{ steps.prep.outputs.build_date }}
@@ -172,6 +175,7 @@ jobs:
           target: php-cli-dev
           build-args: |
             VERSION_ARG=${{ env.PHP_VERSION }}
+            NODE_VERSION_ARG=${{ env.NODE_VERSION }}
             RELEASE_ARG=${{ env.CI_RUN_ID }}
             VCS_REF_ARG=${{ env.CI_SHA }}
             BUILD_DATE_ARG=${{ steps.prep.outputs.build_date }}

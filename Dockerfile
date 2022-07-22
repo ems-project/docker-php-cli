@@ -1,5 +1,7 @@
 ARG VERSION_ARG
+ARG NODE_VERSION_ARG
 
+FROM node:${NODE_VERSION_ARG}-alpine AS node
 FROM php:${VERSION_ARG}-cli-alpine3.15 AS php-cli-prod
 
 ARG VERSION_ARG
@@ -26,6 +28,12 @@ ENV MAIL_SMTP_SERVER="" \
     AWS_CLI_DOWNLOAD_URL="https://github.com/aws/aws-cli/archive" \
     HOME=/home/default \
     PATH=/opt/bin:/usr/local/bin:/usr/bin:$PATH
+
+COPY --from=node /usr/lib /usr/lib
+COPY --from=node /usr/local/share /usr/local/share
+COPY --from=node /usr/local/lib /usr/local/lib
+COPY --from=node /usr/local/include /usr/local/include
+COPY --from=node /usr/local/bin /usr/local/bin
 
 COPY etc/php/ /usr/local/etc/
 COPY etc/ssmtp/ /etc/ssmtp/
@@ -61,7 +69,7 @@ RUN mkdir -p /home/default /opt/etc /opt/src /var/lock \
                                       bash tar gettext ssmtp postgresql-client postgresql-libs \
                                       libjpeg-turbo freetype libpng libwebp libxpm mailx coreutils \
                                       mysql-client jq wget icu-libs libxml2 \
-                                      python3 py3-pip \
+                                      python2 python3 py3-pip \
                                       groff tidyhtml \
     && cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
     && echo "Setup timezone ..." \
@@ -107,8 +115,7 @@ RUN echo "Install and Configure required extra PHP packages ..." \
        | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
        )" \
     && apk add --no-cache --virtual .php-dev-phpext-rundeps $runDeps \
-    && apk add --no-cache --virtual .php-dev-rundeps git npm patch python2 make g++ \
-                                                     nodejs-current nodejs-current-dev \
+    && apk add --no-cache --virtual .php-dev-rundeps git patch make g++ \
     && apk del .build-deps \
     && echo "Configure Xdebug ..." \
     && echo '[xdebug]' >> /usr/local/etc/php/conf.d/xdebug-default.ini \
@@ -130,8 +137,6 @@ RUN echo "Install and Configure required extra PHP packages ..." \
     && mkdir /home/default/.composer \
     && chown 1001:0 /home/default/.composer \
     && chmod -R ug+rw /home/default/.composer \
-    && echo "Install NPM ..." \
-    && apk add --update --no-cache npm \
     && rm -rf /var/cache/apk/* /home/default/.composer \
     && echo "Setup permissions on filesystem for non-privileged user ..." \
     && chown -Rf 1001:0 /home/default \
