@@ -1,14 +1,9 @@
 name: Continuous Docker Image Build
 
 on:
-  schedule:
-    - cron: '0 10 * * *' # everyday at 10am
   push:
     branches:
-      - '7.4-py2'
-    tags:
-      - 'v*'
-  pull_request:
+      - '7.4-py2-node12'
 
 jobs:
 
@@ -37,30 +32,16 @@ jobs:
         run: |
           docker network create docker_default
           docker pull appropriate/curl:latest
-          PHPCLI_PRD_IMAGENAME=base-php-cli
           PHPCLI_DEV_IMAGENAME=base-php-cli-dev
-          DH_PHPCLI_PRD_IMAGENAME=docker.io/elasticms/${PHPCLI_PRD_IMAGENAME}
           DH_PHPCLI_DEV_IMAGENAME=docker.io/elasticms/${PHPCLI_DEV_IMAGENAME}
           VERSION_MAJOR_MINOR_PATCH=${{ env.PHP_VERSION }}
           VERSION_MAJOR_MINOR=${VERSION_MAJOR_MINOR_PATCH%.*}
           VERSION_MAJOR=${VERSION_MAJOR_MINOR%.*}
-          echo ::set-output name=dh_phpcli_prd_image::${DH_PHPCLI_PRD_IMAGENAME}
           echo ::set-output name=dh_phpcli_dev_image::${DH_PHPCLI_DEV_IMAGENAME}
           echo ::set-output name=version_major_minor_patch::${VERSION_MAJOR_MINOR_PATCH}
           echo ::set-output name=version_major_minor::${VERSION_MAJOR_MINOR}
           echo ::set-output name=version_major::${VERSION_MAJOR}
           echo ::set-output name=build_date::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
-
-      - name: Fill DockerHub Docker PHP-CLI Prod Image metadata
-        id: meta_dh_phpcli_prd
-        uses: crazy-max/ghaction-docker-meta@v4
-        with:
-          images: "${{ steps.prep.outputs.dh_phpcli_prd_image }}"
-          tags: |
-            type=raw,value=${{ steps.prep.outputs.version_major_minor_patch }}-py2-node${{ env.NODE_VERSION }}
-            type=raw,value=${{ steps.prep.outputs.version_major_minor }}-py2-node${{ env.NODE_VERSION }}
-            type=raw,value=${{ steps.prep.outputs.version_major }}-py2-node${{ env.NODE_VERSION }}
-            type=raw,value=latest
 
       - name: Fill DockerHub Docker PHP-CLI Dev Image metadata
         id: meta_dh_phpcli_dev
@@ -93,25 +74,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-
 
-      - name: Build Docker PHP-CLI Prod Image
-        id: build_phpcli_prod
-        uses: docker/build-push-action@v3.1.0
-        with:
-          builder: ${{ steps.buildx.outputs.name }}
-          context: .
-          file: Dockerfile
-          target: php-cli-prod
-          build-args: |
-            VERSION_ARG=${{ env.PHP_VERSION }}
-            NODE_VERSION_ARG=${{ env.NODE_VERSION }}
-            RELEASE_ARG=${{ env.CI_RUN_ID }}
-            VCS_REF_ARG=${{ env.CI_SHA }}
-            BUILD_DATE_ARG=${{ steps.prep.outputs.build_date }}
-          push: false
-          load: true
-          tags: ${{ steps.meta_dh_phpcli_prd.outputs.tags }}
-          labels: ${{ steps.meta_dh_phpcli_prd.outputs.labels }}
-
       - name: Build Docker PHP-CLI Dev Image
         id: build_phpcli_dev
         uses: docker/build-push-action@v3.1.0
@@ -131,39 +93,11 @@ jobs:
           tags: ${{ steps.meta_dh_phpcli_dev.outputs.tags }}
           labels: ${{ steps.meta_dh_phpcli_dev.outputs.labels }}
 
-#      - name: Scan GHCR PHP-CLI Prod Docker Image
-#        uses: azure/container-scan@v0
-#        with:
-#          image-name: "${{ steps.prep.outputs.ghcr_phpcli_prd_image }}:${{ env.CI_SHA_SHORT }}"
-#
-#      - name: Scan GHCR PHP-CLI Dev Docker Image
-#        uses: azure/container-scan@v0
-#        with:
-#          image-name: "${{ steps.prep.outputs.ghcr_phpcli_dev_image }}:${{ env.CI_SHA_SHORT }}"
-
       - name: Test PHP-CLI Prod Docker Image
         env:
           PHP_DOCKER_IMAGE_NAME: ${{ steps.prep.outputs.dh_phpcli_prd_image }}:${{ steps.meta_dh_phpcli_prd.outputs.version }}
         run: |
           bats -r test/tests.bats
-
-      - name: Push DockerHub PHP-CLI Docker Prod Image
-        id: push_dh_phpcli_prod
-        uses: docker/build-push-action@v3.1.0
-        with:
-          builder: ${{ steps.buildx.outputs.name }}
-          context: .
-          file: Dockerfile
-          target: php-cli-prod
-          build-args: |
-            VERSION_ARG=${{ env.PHP_VERSION }}
-            NODE_VERSION_ARG=${{ env.NODE_VERSION }}
-            RELEASE_ARG=${{ env.CI_RUN_ID }}
-            VCS_REF_ARG=${{ env.CI_SHA }}
-            BUILD_DATE_ARG=${{ steps.prep.outputs.build_date }}
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta_dh_phpcli_prd.outputs.tags }}
-          labels: ${{ steps.meta_dh_phpcli_prd.outputs.labels }}
 
       - name: Push DockerHub PHP-CLI Docker Dev Image
         id: push_dh_phpcli_dev
@@ -182,12 +116,6 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta_dh_phpcli_dev.outputs.tags }}
           labels: ${{ steps.meta_dh_phpcli_dev.outputs.labels }}
-
-      - name: Check DockerHub PHP-CLI Prod Docker Image
-        if: github.event_name != 'pull_request'
-        run: |
-          docker buildx imagetools inspect ${{ steps.prep.outputs.dh_phpcli_prd_image }}:${{ steps.meta_dh_phpcli_prd.outputs.version }}
-          docker pull ${{ steps.prep.outputs.dh_phpcli_prd_image }}:${{ steps.prep.outputs.version_major_minor_patch }}-py2
 
       - name: Check DockerHub PHP-CLI Dev Docker Image
         if: github.event_name != 'pull_request'
