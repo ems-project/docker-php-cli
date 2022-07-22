@@ -3,7 +3,7 @@ name: Continuous Docker Image Build
 on:
   push:
     branches:
-      - '7.4-py2-node13'
+      - '7.4-py2-node14'
 
 jobs:
 
