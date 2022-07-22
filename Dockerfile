@@ -108,6 +108,7 @@ RUN echo "Install and Configure required extra PHP packages ..." \
        )" \
     && apk add --no-cache --virtual .php-dev-phpext-rundeps $runDeps \
     && apk add --no-cache --virtual .php-dev-rundeps git npm patch python2 make g++ \
+                                                     nodejs-current nodejs-current-dev \
     && apk del .build-deps \
     && echo "Configure Xdebug ..." \
     && echo '[xdebug]' >> /usr/local/etc/php/conf.d/xdebug-default.ini \
