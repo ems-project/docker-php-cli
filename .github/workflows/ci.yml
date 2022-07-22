@@ -3,7 +3,7 @@ name: Continuous Docker Image Build
 on:
   push:
     branches:
-      - '7.4-py2-node14'
+      - '7.4-py2-node15'
 
 jobs:
 
@@ -94,4 +94,4 @@ jobs:
         if: github.event_name != 'pull_request'
         run: |
           docker buildx imagetools inspect ${{ steps.prep.outputs.dh_phpcli_dev_image }}:${{ steps.meta_dh_phpcli_dev.outputs.version }}
-          docker pull ${{ steps.prep.outputs.dh_phpcli_dev_image }}:${{ steps.prep.outputs.version_major_minor_patch }}-py2
+          docker pull ${{ steps.prep.outputs.dh_phpcli_dev_image }}:${{ steps.prep.outputs.version_major_minor_patch }}-py2-node${{ env.NODE_VERSION }}
