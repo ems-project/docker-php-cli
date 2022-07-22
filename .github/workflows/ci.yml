@@ -32,8 +32,7 @@ jobs:
         run: |
           docker network create docker_default
           docker pull appropriate/curl:latest
-          PHPCLI_DEV_IMAGENAME=base-php-cli-dev
-          DH_PHPCLI_DEV_IMAGENAME=docker.io/elasticms/${PHPCLI_DEV_IMAGENAME}
+          DH_PHPCLI_DEV_IMAGENAME=docker.io/elasticms/base-php-cli-dev
           VERSION_MAJOR_MINOR_PATCH=${{ env.PHP_VERSION }}
           VERSION_MAJOR_MINOR=${VERSION_MAJOR_MINOR_PATCH%.*}
           VERSION_MAJOR=${VERSION_MAJOR_MINOR%.*}
@@ -74,33 +73,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-
 
-      - name: Build Docker PHP-CLI Dev Image
-        id: build_phpcli_dev
-        uses: docker/build-push-action@v3.1.0
-        with:
-          builder: ${{ steps.buildx.outputs.name }}
-          context: .
-          file: Dockerfile
-          target: php-cli-dev
-          build-args: |
-            VERSION_ARG=${{ env.PHP_VERSION }}
-            NODE_VERSION_ARG=${{ env.NODE_VERSION }}
-            RELEASE_ARG=${{ env.CI_RUN_ID }}
-            VCS_REF_ARG=${{ env.CI_SHA }}
-            BUILD_DATE_ARG=${{ steps.prep.outputs.build_date }}
-          push: false
-          load: true
-          tags: ${{ steps.meta_dh_phpcli_dev.outputs.tags }}
-          labels: ${{ steps.meta_dh_phpcli_dev.outputs.labels }}
-
-      - name: Test PHP-CLI Prod Docker Image
-        env:
-          PHP_DOCKER_IMAGE_NAME: ${{ steps.prep.outputs.dh_phpcli_prd_image }}:${{ steps.meta_dh_phpcli_prd.outputs.version }}
-        run: |
-          bats -r test/tests.bats
-
-      - name: Push DockerHub PHP-CLI Docker Dev Image
-        id: push_dh_phpcli_dev
+      - name: Build and Push DockerHub PHP-CLI Docker Dev Image
         uses: docker/build-push-action@v3.1.0
         with:
           builder: ${{ steps.buildx.outputs.name }}
