@@ -61,7 +61,7 @@ RUN mkdir -p /home/default /opt/etc /opt/src /var/lock \
                                       bash tar gettext ssmtp postgresql-client postgresql-libs \
                                       libjpeg-turbo freetype libpng libwebp libxpm mailx coreutils \
                                       mysql-client jq wget icu-libs libxml2 \
-#                                      python3 py3-pip \
+                                      python3 py3-pip \
                                       groff tidyhtml \
     && cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
     && echo "Setup timezone ..." \
@@ -75,12 +75,12 @@ RUN mkdir -p /home/default /opt/etc /opt/src /var/lock \
     && echo 'opcache.max_accelerated_files=4000' >> /usr/local/etc/php/conf.d/opcache-recommended.ini \
     && echo 'opcache.revalidate_freq=2' >> /usr/local/etc/php/conf.d/opcache-recommended.ini \
     && echo 'opcache.fast_shutdown=1' >> /usr/local/etc/php/conf.d/opcache-recommended.ini \
-#    && echo "Download and install aws-cli ..." \
-#    && mkdir -p /tmp/aws-cli \
-#    && curl -sSfLk ${AWS_CLI_DOWNLOAD_URL}/${AWS_CLI_VERSION}.tar.gz | tar -xzC /tmp/aws-cli --strip-components=1 \
-#    && cd /tmp/aws-cli \
-#    && python3 setup.py install \
-#    && cd /opt && rm -Rf /tmp/aws-cli \
+    && echo "Download and install aws-cli ..." \
+    && mkdir -p /tmp/aws-cli \
+    && curl -sSfLk ${AWS_CLI_DOWNLOAD_URL}/${AWS_CLI_VERSION}.tar.gz | tar -xzC /tmp/aws-cli --strip-components=1 \
+    && cd /tmp/aws-cli \
+    && python3 setup.py install \
+    && cd /opt && rm -Rf /tmp/aws-cli \
     && apk del .build-deps \
     && rm -rf /var/cache/apk/* \
     && echo "Setup permissions on filesystem for non-privileged user ..." \
@@ -108,7 +108,6 @@ RUN echo "Install and Configure required extra PHP packages ..." \
        )" \
     && apk add --no-cache --virtual .php-dev-phpext-rundeps $runDeps \
     && apk add --no-cache --virtual .php-dev-rundeps git npm patch python2 make g++ \
-                                                     nodejs-current nodejs-current-dev \
     && apk del .build-deps \
     && echo "Configure Xdebug ..." \
     && echo '[xdebug]' >> /usr/local/etc/php/conf.d/xdebug-default.ini \
