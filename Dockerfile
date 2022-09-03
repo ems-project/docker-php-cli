@@ -1,6 +1,6 @@
 ARG VERSION_ARG
 
-FROM php:${VERSION_ARG}-cli-alpine3.15 AS php-cli-prod
+FROM php:${VERSION_ARG}-cli-alpine3.16 AS php-cli-prod
 
 ARG VERSION_ARG
 ARG RELEASE_ARG
