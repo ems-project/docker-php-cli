@@ -46,7 +46,7 @@ RUN mkdir -p /home/default /opt/etc /opt/src /var/lock \
     && docker-php-ext-configure tidy --with-tidy \
     && docker-php-ext-install -j "$(nproc)" soap bz2 fileinfo gettext intl pcntl pgsql \
                                             pdo_pgsql simplexml ldap gd ldap mysqli pdo_mysql \
-                                            zip opcache bcmath exif tidy \
+                                            zip opcache bcmath exif tidy xsl \
     && pecl install APCu-5.1.19 \
     && pecl install redis-5.3.1 \
     && docker-php-ext-enable apcu redis \
