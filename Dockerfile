@@ -42,6 +42,7 @@ RUN mkdir -p /home/default /opt/etc /opt/src /var/lock \
                                                 libjpeg-turbo-dev libpng-dev libwebp-dev libxpm-dev \
                                                 libzip-dev openldap-dev pcre-dev gnupg git bzip2-dev \
                                                 musl-libintl postgresql-dev libxml2-dev tidyhtml-dev \
+                                                libxslt-dev \
     && docker-php-ext-configure gd --with-freetype --with-webp --with-jpeg \
     && docker-php-ext-configure tidy --with-tidy \
     && docker-php-ext-install -j "$(nproc)" soap bz2 fileinfo gettext intl pcntl pgsql \
@@ -61,6 +62,7 @@ RUN mkdir -p /home/default /opt/etc /opt/src /var/lock \
                                       bash tar gettext ssmtp postgresql-client postgresql-libs \
                                       libjpeg-turbo freetype libpng libwebp libxpm mailx coreutils \
                                       mysql-client jq wget icu-libs libxml2 python3 py3-pip groff tidyhtml \
+                                      libxslt \
     && cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
     && echo "Setup timezone ..." \
     && cp /usr/share/zoneinfo/Europe/Brussels /etc/localtime \
