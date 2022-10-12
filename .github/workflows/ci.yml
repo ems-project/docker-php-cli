@@ -133,7 +133,7 @@ jobs:
 
       - name: Build GHCR Docker PHP-CLI Prod Image
         id: build_ghcr_phpcli_prod
-        uses: docker/build-push-action@v3.1.1
+        uses: docker/build-push-action@v3.2.0
         with:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
@@ -151,7 +151,7 @@ jobs:
 
       - name: Build GHCR Docker PHP-CLI Dev Image
         id: build_ghcr_phpcli_dev
-        uses: docker/build-push-action@v3.1.1
+        uses: docker/build-push-action@v3.2.0
         with:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
@@ -185,7 +185,7 @@ jobs:
 
       - name: Push GHCR PHP-CLI Prod Docker Image
         id: push_ghcr_phpcli_prod
-        uses: docker/build-push-action@v3.1.1
+        uses: docker/build-push-action@v3.2.0
         with:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
@@ -202,7 +202,7 @@ jobs:
 
       - name: Push GHCR PHP-CLI Dev Docker Image
         id: push_ghcr_phpcli_dev
-        uses: docker/build-push-action@v3.1.1
+        uses: docker/build-push-action@v3.2.0
         with:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
@@ -225,7 +225,7 @@ jobs:
 
       - name: Push DockerHub PHP-CLI Docker Prod Image
         id: push_dh_phpcli_prod
-        uses: docker/build-push-action@v3.1.1
+        uses: docker/build-push-action@v3.2.0
         with:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
@@ -242,7 +242,7 @@ jobs:
 
       - name: Push DockerHub PHP-CLI Docker Dev Image
         id: push_dh_phpcli_dev
-        uses: docker/build-push-action@v3.1.1
+        uses: docker/build-push-action@v3.2.0
         with:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
