@@ -66,10 +66,10 @@ RUN mkdir -p /home/default /opt/etc /opt/src /var/lock \
        | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
        )" \
     && apk add --update --no-cache --virtual .ems-phpext-rundeps $runDeps \
-    && apk add --update --upgrade --no-cache --virtual .ems-rundeps curl tzdata \
-                                      bash tar gettext ssmtp postgresql-client postgresql-libs \
+    && apk add --update --upgrade --no-cache --virtual .ems-rundeps tzdata \
+                                      bash gettext ssmtp postgresql-client postgresql-libs \
                                       libjpeg-turbo freetype libpng libwebp libxpm mailx coreutils \
-                                      mysql-client jq wget icu-libs libxml2 python3 py3-pip groff tidyhtml \
+                                      mysql-client jq icu-libs python3 py3-pip groff tidyhtml \
                                       libxslt \
     && cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
     && echo "Setup timezone ..." \
