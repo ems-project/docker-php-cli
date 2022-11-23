@@ -35,14 +35,11 @@ COPY --from=node /usr/local/lib /usr/local/lib
 COPY --from=node /usr/local/include /usr/local/include
 COPY --from=node /usr/local/bin /usr/local/bin
 
-COPY etc/php/ /usr/local/etc/
-COPY etc/ssmtp/ /etc/ssmtp/
-COPY bin/ /usr/local/bin/
+COPY --chmod=775 --chown=1001:0 etc/php/ /usr/local/etc/
+COPY --chmod=775 --chown=1001:0 etc/ssmtp/ /etc/ssmtp/
+COPY --chmod=775 --chown=1001:0 bin/ /usr/local/bin/
 
 RUN mkdir -p /home/default /opt/etc /opt/src /var/lock \
-    && chmod +x /usr/local/bin/apk-list \
-                /usr/local/bin/docker-php-entrypoint \
-                /usr/local/bin/wait-for-it \
     && echo "Upgrade all already installed packages ..." \
     && apk upgrade --available \
     && echo "Install and Configure required extra PHP packages ..." \
@@ -92,11 +89,10 @@ RUN mkdir -p /home/default /opt/etc /opt/src /var/lock \
     && apk del .build-deps \
     && rm -rf /var/cache/apk/* \
     && echo "Setup permissions on filesystem for non-privileged user ..." \
-    && chown -Rf 1001:0 /home/default /opt /etc/ssmtp /usr/local/etc /var/lock \
-    && chmod -R ug+rw /home/default /opt /etc/ssmtp /usr/local/etc \
+    && chown -Rf 1001:0 /home/default /opt /var/lock \
+    && chmod -R ug+rw /home/default /opt \
     && find /opt -type d -exec chmod ug+x {} \; \
-    && find /var/lock -type d -exec chmod ug+x {} \; \
-    && find /usr/local/etc -type d -exec chmod ug+x {} \; 
+    && find /var/lock -type d -exec chmod ug+x {} \; 
 
 USER 1001
 
