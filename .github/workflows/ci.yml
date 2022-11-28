@@ -144,6 +144,7 @@ jobs:
             RELEASE_ARG=${{ env.CI_RUN_ID }}
             VCS_REF_ARG=${{ env.CI_SHA }}
             BUILD_DATE_ARG=${{ steps.prep.outputs.build_date }}
+            NODE_VERSION_ARG=${{ env.NODE_VERSION }}
           push: false
           load: true
           tags: ${{ steps.meta_ghcr_phpcli_prd.outputs.tags }}
@@ -162,6 +163,7 @@ jobs:
             RELEASE_ARG=${{ env.CI_RUN_ID }}
             VCS_REF_ARG=${{ env.CI_SHA }}
             BUILD_DATE_ARG=${{ steps.prep.outputs.build_date }}
+            NODE_VERSION_ARG=${{ env.NODE_VERSION }}
           push: false
           load: true
           tags: ${{ steps.meta_ghcr_phpcli_dev.outputs.tags }}
