@@ -198,6 +198,7 @@ jobs:
             RELEASE_ARG=${{ env.CI_RUN_ID }}
             VCS_REF_ARG=${{ env.CI_SHA }}
             BUILD_DATE_ARG=${{ steps.prep.outputs.build_date }}
+            NODE_VERSION_ARG=${{ env.NODE_VERSION }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta_ghcr_phpcli_prd.outputs.tags }}
           labels: ${{ steps.meta_ghcr_phpcli_prd.outputs.labels }}
@@ -215,6 +216,7 @@ jobs:
             RELEASE_ARG=${{ env.CI_RUN_ID }}
             VCS_REF_ARG=${{ env.CI_SHA }}
             BUILD_DATE_ARG=${{ steps.prep.outputs.build_date }}
+            NODE_VERSION_ARG=${{ env.NODE_VERSION }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta_ghcr_phpcli_dev.outputs.tags }}
           labels: ${{ steps.meta_ghcr_phpcli_dev.outputs.labels }}
@@ -238,6 +240,7 @@ jobs:
             RELEASE_ARG=${{ env.CI_RUN_ID }}
             VCS_REF_ARG=${{ env.CI_SHA }}
             BUILD_DATE_ARG=${{ steps.prep.outputs.build_date }}
+            NODE_VERSION_ARG=${{ env.NODE_VERSION }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta_dh_phpcli_prd.outputs.tags }}
           labels: ${{ steps.meta_dh_phpcli_prd.outputs.labels }}
@@ -255,6 +258,7 @@ jobs:
             RELEASE_ARG=${{ env.CI_RUN_ID }}
             VCS_REF_ARG=${{ env.CI_SHA }}
             BUILD_DATE_ARG=${{ steps.prep.outputs.build_date }}
+            NODE_VERSION_ARG=${{ env.NODE_VERSION }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta_dh_phpcli_dev.outputs.tags }}
           labels: ${{ steps.meta_dh_phpcli_dev.outputs.labels }}
