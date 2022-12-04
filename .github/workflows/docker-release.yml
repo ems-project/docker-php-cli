@@ -71,7 +71,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          images: "${{ needs.init.outputs.phpcli-dev-docker-image-name }}"
+          images: "${{ steps.prep.outputs.phpcli-prd-docker-image-name }}"
           tags: |
             type=raw,value=${{ steps.prep.outputs.github-ci-sha-short }}
             type=raw,value=${{ steps.prep.outputs.version-patch }}
