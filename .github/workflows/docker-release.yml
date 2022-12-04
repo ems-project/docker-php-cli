@@ -232,7 +232,7 @@ jobs:
 
       - name: Scan "${{ needs.init.outputs.phpcli-dev-docker-image-name }}" Docker image
         uses: anchore/scan-action@v3
-        id: scan-phpcli
+        id: scan-phpcli-dev
         with:
           image: ${{ needs.init.outputs.phpcli-dev-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }}
           fail-build: false
