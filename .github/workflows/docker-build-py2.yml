@@ -1,4 +1,4 @@
-name: Docker Build
+name: Docker Build (Python 2)
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
 
-  build-docker-images:
+  build-py2-docker-images:
 
     strategy:
       matrix:
@@ -33,24 +33,6 @@ jobs:
           echo "phpcli-prd-docker-image-name=${PHPCLI_PRD_DOCKER_IMAGE_NAME}" >> $GITHUB_OUTPUT
           echo "phpcli-dev-docker-image-name=${PHPCLI_DEV_DOCKER_IMAGE_NAME}" >> $GITHUB_OUTPUT
           echo "build-date=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_OUTPUT
-
-      - name: Fill "${{ steps.prep.outputs.phpcli-prd-docker-image-name }}" Docker Image metadata
-        id: meta-phpcli-prd
-        uses: docker/metadata-action@v4
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          images: "${{ steps.prep.outputs.phpcli-prd-docker-image-name }}"
-          tags: |
-            type=raw,value=rc
-
-      - name: Fill "${{ steps.prep.outputs.phpcli-dev-docker-image-name }}" Docker Image metadata
-        id: meta-phpcli-dev
-        uses: docker/metadata-action@v4
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          images: "${{ steps.prep.outputs.phpcli-dev-docker-image-name }}"
-          tags: |
-            type=raw,value=rc
 
       - name: Fill "${{ steps.prep.outputs.phpcli-prd-docker-image-name }}" (py2-${{ matrix.py2-node-version }}) Docker Image metadata
         id: meta-phpcli-prd-py2
@@ -81,46 +63,6 @@ jobs:
           key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-
-
-      - name: Build "${{ steps.prep.outputs.phpcli-prd-docker-image-name }}" Docker Image
-        id: build-phpcli-prd
-        uses: docker/build-push-action@v3
-        with:
-          builder: ${{ steps.buildx.outputs.name }}
-          context: .
-          file: Dockerfile
-          target: php-cli-prod
-          build-args: |
-            VERSION_ARG=${{ env.PHP_VERSION }}
-            RELEASE_ARG=${{ env.CI_RUN_ID }}
-            VCS_REF_ARG=${{ env.CI_SHA }}
-            BUILD_DATE_ARG=${{ steps.prep.outputs.build-date }}
-            NODE_VERSION_ARG=${{ env.NODE_VERSION }}
-          push: false
-          load: true
-          tags: ${{ steps.meta-phpcli-prd.outputs.tags }}
-          labels: ${{ steps.meta-phpcli-prd.outputs.labels }}
-          outputs: type=docker,dest=/tmp/phpcli-prd-myimage.tar
-
-      - name: Build "${{ steps.prep.outputs.phpcli-dev-docker-image-name }}" Docker Image
-        id: build-phpcli-dev
-        uses: docker/build-push-action@v3
-        with:
-          builder: ${{ steps.buildx.outputs.name }}
-          context: .
-          file: Dockerfile
-          target: php-cli-dev
-          build-args: |
-            VERSION_ARG=${{ env.PHP_VERSION }}
-            RELEASE_ARG=${{ env.CI_RUN_ID }}
-            VCS_REF_ARG=${{ env.CI_SHA }}
-            BUILD_DATE_ARG=${{ steps.prep.outputs.build-date }}
-            NODE_VERSION_ARG=${{ env.NODE_VERSION }}
-          push: false
-          load: true
-          tags: ${{ steps.meta-phpcli-dev.outputs.tags }}
-          labels: ${{ steps.meta-phpcli-dev.outputs.labels }}
-          outputs: type=docker,dest=/tmp/phpcli-dev-myimage.tar
 
       - name: Build "${{ steps.prep.outputs.phpcli-prd-docker-image-name }}" (py2-node${{ matrix.py2-node-version }}) Docker Image
         id: build-phpcli-prd-py2
@@ -167,26 +109,6 @@ jobs:
         run: |
           pip install docker-squash
 
-      - name: Squash "${{ steps.prep.outputs.phpcli-prd-docker-image-name }}" Docker Images
-        id: squash-phpcli-prd
-        run: |
-          cat /tmp/phpcli-prd-myimage.tar | docker load
-          docker-squash --verbose --message "Build and Squashed in GitHub Action" \
-            --tag ${{ steps.prep.outputs.phpcli-prd-docker-image-name }}:rc \
-            --output-path /tmp/phpcli-prd-myimage.tar \
-            ${{ steps.prep.outputs.phpcli-prd-docker-image-name }}:rc
-          cat /tmp/phpcli-prd-myimage.tar | docker load
-
-      - name: Squash "${{ steps.prep.outputs.phpcli-dev-docker-image-name }}" Docker Images
-        id: squash-phpcli-dev
-        run: |
-          cat /tmp/phpcli-dev-myimage.tar | docker load
-          docker-squash --verbose --message "Build and Squashed in GitHub Action" \
-            --tag ${{ steps.prep.outputs.phpcli-dev-docker-image-name }}:rc \
-            --output-path /tmp/phpcli-dev-myimage.tar \
-            ${{ steps.prep.outputs.phpcli-dev-docker-image-name }}:rc
-          cat /tmp/phpcli-dev-myimage.tar | docker load
-
       - name: Squash "${{ steps.prep.outputs.phpcli-prd-docker-image-name }}" (py2-node${{ matrix.py2-node-version }}) Docker Images
         id: squash-phpcli-prd-py2
         run: |
@@ -208,13 +130,6 @@ jobs:
           cat /tmp/phpcli-dev-py2-node${{ matrix.py2-node-version }}-myimage.tar | docker load
 
       - name: Check Docker Images
-        run: |
-          docker image inspect ${{ steps.prep.outputs.phpcli-prd-docker-image-name }}:rc
-          docker image inspect ${{ steps.prep.outputs.phpcli-dev-docker-image-name }}:rc
-          docker history ${{ steps.prep.outputs.phpcli-prd-docker-image-name }}:rc
-          docker history ${{ steps.prep.outputs.phpcli-dev-docker-image-name }}:rc
-
-      - name: Check Docker Images Matrix
         run: |
           docker image inspect ${{ steps.prep.outputs.phpcli-prd-docker-image-name }}:rc-py2-node${{ matrix.py2-node-version }}
           docker image inspect ${{ steps.prep.outputs.phpcli-dev-docker-image-name }}:rc-py2-node${{ matrix.py2-node-version }}
