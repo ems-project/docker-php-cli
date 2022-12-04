@@ -1,7 +1,7 @@
 ARG VERSION_ARG
 ARG NODE_VERSION_ARG
 
-FROM node:${NODE_VERSION_ARG}-alpine3.15 AS node
+FROM node:${NODE_VERSION_ARG} AS node
 FROM php:${VERSION_ARG}-cli-alpine3.15 AS php-cli-prod
 
 ARG VERSION_ARG
