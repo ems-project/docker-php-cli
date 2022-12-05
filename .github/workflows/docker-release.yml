@@ -252,7 +252,8 @@ jobs:
 
       - name: Test "${{ needs.init.outputs.phpcli-prd-docker-image-name }}" Docker Image
         env:
-          PHPCLI_PRD_DOCKER_IMAGE_NAME: ${{ needs.init.outputs.phpcli-prd-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }}
+          PHP_DOCKER_IMAGE_NAME: ${{ needs.init.outputs.phpcli-prd-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }}
+          PHP_VERSION: ${{ needs.init.outputs.version-patch }}
         run: |
           docker network create docker_default
           docker pull appropriate/curl:latest
