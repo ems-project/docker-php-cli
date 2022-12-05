@@ -9,10 +9,6 @@ jobs:
 
   init:
 
-    strategy:
-      matrix:
-        py2-node-version: [12,13,14,15,16]
-
     runs-on: ubuntu-20.04
 
     outputs:
@@ -262,7 +258,7 @@ jobs:
 
       - name: Test "${{ needs.init.outputs.phpcli-prd-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }}-py2-node${{ matrix.py2-node-version }}" Docker Image
         env:
-          PHPCLI_PRD_DOCKER_IMAGE_NAME: ${{ needs.init.outputs.phpcli-prd-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }}
+          PHPCLI_PRD_DOCKER_IMAGE_NAME: ${{ needs.init.outputs.phpcli-prd-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }}-py2-node${{ matrix.py2-node-version }}
         run: |
           docker network create docker_default
           docker pull appropriate/curl:latest
