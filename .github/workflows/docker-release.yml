@@ -1,5 +1,7 @@
 name: Docker Release
 
+run-name: Release Docker ${{ github.ref_name }} Images by @${{ github.actor }}
+
 on:
   push:
     tags:
@@ -42,7 +44,7 @@ jobs:
       - name: Prepare Workflow Environment
         id: prep
         run: |
-          VERSION_MAJOR_MINOR_PATCH=${GITHUB_REF#refs/*/}
+          VERSION_MAJOR_MINOR_PATCH=${GITHUB_REF_NAME}
           VERSION_MAJOR_MINOR=${VERSION_MAJOR_MINOR_PATCH%.*}
           VERSION_MAJOR=${VERSION_MAJOR_MINOR%.*}
           echo "phpcli-prd-docker-image-name=${PHPCLI_PRD_DOCKER_IMAGE_NAME}" >> $GITHUB_OUTPUT
