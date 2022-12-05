@@ -131,7 +131,7 @@ jobs:
             BUILD_DATE_ARG=${{ needs.init.outputs.build-date }}
             NODE_VERSION_ARG=${{ matrix.py2-node-version }}
           tags: ${{ steps.meta-phpcli-dev.outputs.tags }}
-          labels: ${{ steps.meta-phpcli-prd.outputs.labels }}
+          labels: ${{ steps.meta-phpcli-dev.outputs.labels }}
           outputs: type=docker,dest=/tmp/phpcli-dev-py2-node${{ matrix.py2-node-version }}-builded.tar
 
       - name: Install Docker Squash
@@ -144,14 +144,14 @@ jobs:
         run: |
           cat /tmp/phpcli-prd-py2-node${{ matrix.py2-node-version }}-builded.tar | docker load
           docker-squash --verbose --message "Build and Squashed in GitHub Action" \
-            --tag ${{ needs.init.outputs.phpcli-prd-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }} \
+            --tag ${{ needs.init.outputs.phpcli-prd-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }}-py2-node${{ matrix.py2-node-version }} \
             --output-path /tmp/phpcli-prd-py2-node${{ matrix.py2-node-version }}-squashed.tar \
             --cleanup \
-            ${{ needs.init.outputs.phpcli-prd-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }}
+            ${{ needs.init.outputs.phpcli-prd-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }}-py2-node${{ matrix.py2-node-version }}
           cat /tmp/phpcli-prd-py2-node${{ matrix.py2-node-version }}-squashed.tar | docker load         
           tags=$(echo "${{ steps.meta-phpcli-dev.outputs.tags }}" | tr "\n" " ")
           for tag in $tags; do
-            docker tag ${{ needs.init.outputs.phpcli-prd-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }} $tag
+            docker tag ${{ needs.init.outputs.phpcli-prd-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }}-py2-node${{ matrix.py2-node-version }} $tag
           done
           docker save --output /tmp/phpcli-prd-py2-node${{ matrix.py2-node-version }}-final.tar $tags
 
@@ -160,14 +160,14 @@ jobs:
         run: |
           cat /tmp/phpcli-dev-py2-node${{ matrix.py2-node-version }}-builded.tar | docker load
           docker-squash --verbose --message "Build and Squashed in GitHub Action" \
-            --tag ${{ needs.init.outputs.phpcli-dev-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }} \
+            --tag ${{ needs.init.outputs.phpcli-dev-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }}-py2-node${{ matrix.py2-node-version }} \
             --output-path /tmp/phpcli-dev-py2-node${{ matrix.py2-node-version }}-squashed.tar \
             --cleanup \
-            ${{ needs.init.outputs.phpcli-dev-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }}
+            ${{ needs.init.outputs.phpcli-dev-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }}-py2-node${{ matrix.py2-node-version }}
           cat /tmp/phpcli-dev-py2-node${{ matrix.py2-node-version }}-squashed.tar | docker load         
           tags=$(echo "${{ steps.meta-phpcli-dev.outputs.labels }}" | tr "\n" " ")
           for tag in $tags; do
-            docker tag ${{ needs.init.outputs.phpcli-dev-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }} $tag
+            docker tag ${{ needs.init.outputs.phpcli-dev-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }}-py2-node${{ matrix.py2-node-version }} $tag
           done
           docker save --output /tmp/phpcli-dev-py2-node${{ matrix.py2-node-version }}-final.tar $tags
 
