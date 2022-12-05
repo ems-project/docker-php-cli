@@ -107,13 +107,13 @@ docker build --build-arg VERSION_ARG=${PHP_VERSION} \
 
 docker build --build-arg VERSION_ARG=${PHP_VERSION} \
              --build-arg AWS_CLI_VERSION_ARG=${AWS_CLI_VERSION} \
-             --build-arg NODE_VERSION_ARG=15 \
+             --build-arg NODE_VERSION_ARG=16 \
              --build-arg RELEASE_ARG=snapshot \
              --build-arg BUILD_DATE_ARG="" \
              --build-arg VCS_REF_ARG="" \
              --target php-cli-prod \
-             -f Dockerfile.py2-node15 \
-             -t ${PHPCLI_PRD_DOCKER_IMAGE_NAME}:rc-py2-node15 .
+             -f Dockerfile.py2-node16 \
+             -t ${PHPCLI_PRD_DOCKER_IMAGE_NAME}:rc-py2-node16 .
 
 docker build --build-arg VERSION_ARG=${PHP_VERSION} \
              --build-arg AWS_CLI_VERSION_ARG=${AWS_CLI_VERSION} \
