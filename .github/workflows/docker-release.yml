@@ -1,6 +1,6 @@
 name: Docker Release
 
-run-name: Release Docker ${{ github.ref_name }} Images by @${{ github.actor }}
+run-name: Docker Release ${{ github.ref_name }} by @${{ github.actor }}
 
 on:
   push:
