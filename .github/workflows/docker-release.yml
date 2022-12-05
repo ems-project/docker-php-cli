@@ -16,6 +16,7 @@ jobs:
       version-minor: ${{ steps.prep.outputs.version-minor }}
       version-major: ${{ steps.prep.outputs.version-major }}
       build-date: ${{ steps.prep.outputs.build-date }}
+      node-version: ${{ steps.prep.outputs.node-version }}
       phpcli-prd-docker-image-name: ${{ steps.prep.outputs.phpfpm-prd-docker-image-name }}
       phpcli-prd-docker-image-tags: ${{ steps.meta-phpcli-prd.outputs.tags }}
       phpcli-prd-docker-image-labels: ${{ steps.meta-phpcli-prd.outputs.labels }}
@@ -48,6 +49,7 @@ jobs:
           echo "version-patch=${VERSION_MAJOR_MINOR_PATCH}" >> $GITHUB_OUTPUT
           echo "version-minor=${VERSION_MAJOR_MINOR}" >> $GITHUB_OUTPUT
           echo "version-major=${VERSION_MAJOR}" >> $GITHUB_OUTPUT
+          echo "node-version=${NODE_VERSION}" >> $GITHUB_OUTPUT
           echo "build-date=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_OUTPUT
           echo "github-ci-sha-short=${CI_SHA_SHORT}" >> $GITHUB_OUTPUT
           echo "github-ci-sha=${CI_SHA}" >> $GITHUB_OUTPUT
@@ -111,6 +113,7 @@ jobs:
             RELEASE_ARG=${{ needs.init.outputs.github-ci-run-id }}
             VCS_REF_ARG=${{ needs.init.outputs.github-ci-sha }}
             BUILD_DATE_ARG=${{ needs.init.outputs.build-date }}
+            NODE_VERSION_ARG=${{ needs.init.outputs.node-version }}
           tags: ${{ needs.init.outputs.phpcli-prd-docker-image-tags }}
           labels: ${{ needs.init.outputs.phpcli-prd-docker-image-labels }}
           outputs: type=docker,dest=/tmp/phpcli-prd-builded.tar
@@ -128,6 +131,7 @@ jobs:
             RELEASE_ARG=${{ needs.init.outputs.github-ci-run-id }}
             VCS_REF_ARG=${{ needs.init.outputs.github-ci-sha }}
             BUILD_DATE_ARG=${{ needs.init.outputs.build-date }}
+            NODE_VERSION_ARG=${{ needs.init.outputs.node-version }}
           tags: ${{ needs.init.outputs.phpcli-dev-docker-image-tags }}
           labels: ${{ needs.init.outputs.phpcli-dev-docker-image-labels }}
           outputs: type=docker,dest=/tmp/phpcli-dev-builded.tar

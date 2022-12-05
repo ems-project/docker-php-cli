@@ -16,10 +16,10 @@ jobs:
       version-minor: ${{ steps.prep.outputs.version-minor }}
       version-major: ${{ steps.prep.outputs.version-major }}
       build-date: ${{ steps.prep.outputs.build-date }}
-      phpcli-prd-docker-image-name: ${{ steps.prep.outputs.phpfpm-prd-docker-image-name }}
+      phpcli-prd-docker-image-name: ${{ steps.prep.outputs.phpcli-prd-docker-image-name }}
       phpcli-prd-docker-image-tags: ${{ steps.meta-phpcli-prd.outputs.tags }}
       phpcli-prd-docker-image-labels: ${{ steps.meta-phpcli-prd.outputs.labels }}
-      phpcli-dev-docker-image-name: ${{ steps.prep.outputs.phpfpm-dev-docker-image-name }}
+      phpcli-dev-docker-image-name: ${{ steps.prep.outputs.phpcli-dev-docker-image-name }}
       phpcli-dev-docker-image-tags: ${{ steps.meta-phpcli-dev.outputs.tags }}
       phpcli-dev-docker-image-labels: ${{ steps.meta-phpcli-dev.outputs.labels }}
       github-ci-run-id: ${{ steps.prep.outputs.github-ci-run-id }}
@@ -144,36 +144,36 @@ jobs:
           pip install docker-squash
 
       - name: Squash "${{ needs.init.outputs.phpcli-prd-docker-image-name }} ( py2-node${{ matrix.py2-node-version }} )" Docker Image
-        id: squash-phpfpm-prd
+        id: squash-phpcli-prd
         run: |
-          cat /tmp/phpfpm-prd-py2-node${{ matrix.py2-node-version }}-builded.tar | docker load
+          cat /tmp/phpcli-prd-py2-node${{ matrix.py2-node-version }}-builded.tar | docker load
           docker-squash --verbose --message "Build and Squashed in GitHub Action" \
             --tag ${{ needs.init.outputs.phpcli-prd-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }} \
-            --output-path /tmp/phpfpm-prd-py2-node${{ matrix.py2-node-version }}-squashed.tar \
+            --output-path /tmp/phpcli-prd-py2-node${{ matrix.py2-node-version }}-squashed.tar \
             --cleanup \
             ${{ needs.init.outputs.phpcli-prd-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }}
-          cat /tmp/phpfpm-prd-py2-node${{ matrix.py2-node-version }}-squashed.tar | docker load         
+          cat /tmp/phpcli-prd-py2-node${{ matrix.py2-node-version }}-squashed.tar | docker load         
           tags=$(echo "${{ needs.init.outputs.phpcli-prd-docker-image-tags }}" | tr "\n" " ")
           for tag in $tags; do
             docker tag ${{ needs.init.outputs.phpcli-prd-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }} $tag
           done
-          docker save --output /tmp/phpfpm-prd-py2-node${{ matrix.py2-node-version }}-final.tar $tags
+          docker save --output /tmp/phpcli-prd-py2-node${{ matrix.py2-node-version }}-final.tar $tags
 
       - name: Squash "${{ needs.init.outputs.phpcli-dev-docker-image-name }} ( py2-node${{ matrix.py2-node-version }} )" Docker Image
-        id: squash-phpfpm-dev
+        id: squash-phpcli-dev
         run: |
-          cat /tmp/phpfpm-dev-py2-node${{ matrix.py2-node-version }}-builded.tar | docker load
+          cat /tmp/phpcli-dev-py2-node${{ matrix.py2-node-version }}-builded.tar | docker load
           docker-squash --verbose --message "Build and Squashed in GitHub Action" \
             --tag ${{ needs.init.outputs.phpcli-dev-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }} \
-            --output-path /tmp/phpfpm-dev-py2-node${{ matrix.py2-node-version }}-squashed.tar \
+            --output-path /tmp/phpcli-dev-py2-node${{ matrix.py2-node-version }}-squashed.tar \
             --cleanup \
             ${{ needs.init.outputs.phpcli-dev-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }}
-          cat /tmp/phpfpm-dev-py2-node${{ matrix.py2-node-version }}-squashed.tar | docker load         
+          cat /tmp/phpcli-dev-py2-node${{ matrix.py2-node-version }}-squashed.tar | docker load         
           tags=$(echo "${{ needs.init.outputs.phpcli-dev-docker-image-tags }}" | tr "\n" " ")
           for tag in $tags; do
             docker tag ${{ needs.init.outputs.phpcli-dev-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }} $tag
           done
-          docker save --output /tmp/phpfpm-dev-py2-node${{ matrix.py2-node-version }}-final.tar $tags
+          docker save --output /tmp/phpcli-dev-py2-node${{ matrix.py2-node-version }}-final.tar $tags
 
       - name: Check Docker Images
         run: |
