@@ -149,7 +149,7 @@ jobs:
             --cleanup \
             ${{ needs.init.outputs.phpcli-prd-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }}-py2-node${{ matrix.py2-node-version }}
           cat /tmp/phpcli-prd-py2-node${{ matrix.py2-node-version }}-squashed.tar | docker load         
-          tags=$(echo "${{ steps.meta-phpcli-dev.outputs.tags }}" | tr "\n" " ")
+          tags=$(echo "${{ steps.meta-phpcli-prd.outputs.tags }}" | tr "\n" " ")
           for tag in $tags; do
             docker tag ${{ needs.init.outputs.phpcli-prd-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }}-py2-node${{ matrix.py2-node-version }} $tag
           done
@@ -165,7 +165,7 @@ jobs:
             --cleanup \
             ${{ needs.init.outputs.phpcli-dev-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }}-py2-node${{ matrix.py2-node-version }}
           cat /tmp/phpcli-dev-py2-node${{ matrix.py2-node-version }}-squashed.tar | docker load         
-          tags=$(echo "${{ steps.meta-phpcli-dev.outputs.labels }}" | tr "\n" " ")
+          tags=$(echo "${{ steps.meta-phpcli-dev.outputs.tags }}" | tr "\n" " ")
           for tag in $tags; do
             docker tag ${{ needs.init.outputs.phpcli-dev-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }}-py2-node${{ matrix.py2-node-version }} $tag
           done
