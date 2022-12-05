@@ -8,6 +8,7 @@ source .build.env
 set +a
 
 docker build --build-arg VERSION_ARG=${PHP_VERSION} \
+             --build-arg AWS_CLI_VERSION_ARG=${AWS_CLI_VERSION} \
              --build-arg NODE_VERSION_ARG=${NODE_VERSION} \
              --build-arg RELEASE_ARG=snapshot \
              --build-arg BUILD_DATE_ARG="" \
@@ -16,6 +17,7 @@ docker build --build-arg VERSION_ARG=${PHP_VERSION} \
              -t ${PHPCLI_PRD_DOCKER_IMAGE_NAME}:rc .
 
 docker build --build-arg VERSION_ARG=${PHP_VERSION} \
+             --build-arg AWS_CLI_VERSION_ARG=${AWS_CLI_VERSION} \
              --build-arg NODE_VERSION_ARG=${NODE_VERSION} \
              --build-arg RELEASE_ARG=snapshot \
              --build-arg BUILD_DATE_ARG="" \
@@ -24,6 +26,7 @@ docker build --build-arg VERSION_ARG=${PHP_VERSION} \
              -t ${PHPCLI_DEV_DOCKER_IMAGE_NAME}:rc .
 
 docker build --build-arg VERSION_ARG=${PHP_VERSION} \
+             --build-arg AWS_CLI_VERSION_ARG=${AWS_CLI_VERSION} \
              --build-arg NODE_VERSION_ARG=12 \
              --build-arg RELEASE_ARG=snapshot \
              --build-arg BUILD_DATE_ARG="" \
@@ -33,6 +36,7 @@ docker build --build-arg VERSION_ARG=${PHP_VERSION} \
              -t ${PHPCLI_PRD_DOCKER_IMAGE_NAME}:rc-py2-node12 .
 
 docker build --build-arg VERSION_ARG=${PHP_VERSION} \
+             --build-arg AWS_CLI_VERSION_ARG=${AWS_CLI_VERSION} \
              --build-arg NODE_VERSION_ARG=12 \
              --build-arg RELEASE_ARG=snapshot \
              --build-arg BUILD_DATE_ARG="" \
@@ -42,6 +46,7 @@ docker build --build-arg VERSION_ARG=${PHP_VERSION} \
              -t ${PHPCLI_DEV_DOCKER_IMAGE_NAME}:rc-py2-node12 .
 
 docker build --build-arg VERSION_ARG=${PHP_VERSION} \
+             --build-arg AWS_CLI_VERSION_ARG=${AWS_CLI_VERSION} \
              --build-arg NODE_VERSION_ARG=13 \
              --build-arg RELEASE_ARG=snapshot \
              --build-arg BUILD_DATE_ARG="" \
@@ -51,6 +56,7 @@ docker build --build-arg VERSION_ARG=${PHP_VERSION} \
              -t ${PHPCLI_PRD_DOCKER_IMAGE_NAME}:rc-py2-node13 .
 
 docker build --build-arg VERSION_ARG=${PHP_VERSION} \
+             --build-arg AWS_CLI_VERSION_ARG=${AWS_CLI_VERSION} \
              --build-arg NODE_VERSION_ARG=13 \
              --build-arg RELEASE_ARG=snapshot \
              --build-arg BUILD_DATE_ARG="" \
@@ -60,6 +66,7 @@ docker build --build-arg VERSION_ARG=${PHP_VERSION} \
              -t ${PHPCLI_DEV_DOCKER_IMAGE_NAME}:rc-py2-node13 .
 
 docker build --build-arg VERSION_ARG=${PHP_VERSION} \
+             --build-arg AWS_CLI_VERSION_ARG=${AWS_CLI_VERSION} \
              --build-arg NODE_VERSION_ARG=14 \
              --build-arg RELEASE_ARG=snapshot \
              --build-arg BUILD_DATE_ARG="" \
@@ -69,6 +76,7 @@ docker build --build-arg VERSION_ARG=${PHP_VERSION} \
              -t ${PHPCLI_PRD_DOCKER_IMAGE_NAME}:rc-py2-node14 .
 
 docker build --build-arg VERSION_ARG=${PHP_VERSION} \
+             --build-arg AWS_CLI_VERSION_ARG=${AWS_CLI_VERSION} \
              --build-arg NODE_VERSION_ARG=14 \
              --build-arg RELEASE_ARG=snapshot \
              --build-arg BUILD_DATE_ARG="" \
@@ -78,6 +86,7 @@ docker build --build-arg VERSION_ARG=${PHP_VERSION} \
              -t ${PHPCLI_DEV_DOCKER_IMAGE_NAME}:rc-py2-node14 .
 
 docker build --build-arg VERSION_ARG=${PHP_VERSION} \
+             --build-arg AWS_CLI_VERSION_ARG=${AWS_CLI_VERSION} \
              --build-arg NODE_VERSION_ARG=15 \
              --build-arg RELEASE_ARG=snapshot \
              --build-arg BUILD_DATE_ARG="" \
@@ -87,6 +96,7 @@ docker build --build-arg VERSION_ARG=${PHP_VERSION} \
              -t ${PHPCLI_PRD_DOCKER_IMAGE_NAME}:rc-py2-node15 .
 
 docker build --build-arg VERSION_ARG=${PHP_VERSION} \
+             --build-arg AWS_CLI_VERSION_ARG=${AWS_CLI_VERSION} \
              --build-arg NODE_VERSION_ARG=15 \
              --build-arg RELEASE_ARG=snapshot \
              --build-arg BUILD_DATE_ARG="" \
@@ -96,6 +106,7 @@ docker build --build-arg VERSION_ARG=${PHP_VERSION} \
              -t ${PHPCLI_DEV_DOCKER_IMAGE_NAME}:rc-py2-node15 .
 
 docker build --build-arg VERSION_ARG=${PHP_VERSION} \
+             --build-arg AWS_CLI_VERSION_ARG=${AWS_CLI_VERSION} \
              --build-arg NODE_VERSION_ARG=15 \
              --build-arg RELEASE_ARG=snapshot \
              --build-arg BUILD_DATE_ARG="" \
@@ -105,6 +116,7 @@ docker build --build-arg VERSION_ARG=${PHP_VERSION} \
              -t ${PHPCLI_PRD_DOCKER_IMAGE_NAME}:rc-py2-node15 .
 
 docker build --build-arg VERSION_ARG=${PHP_VERSION} \
+             --build-arg AWS_CLI_VERSION_ARG=${AWS_CLI_VERSION} \
              --build-arg NODE_VERSION_ARG=16 \
              --build-arg RELEASE_ARG=snapshot \
              --build-arg BUILD_DATE_ARG="" \

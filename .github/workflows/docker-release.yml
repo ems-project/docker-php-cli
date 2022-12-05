@@ -26,6 +26,7 @@ jobs:
       github-ci-run-id: ${{ steps.prep.outputs.github-ci-run-id }}
       github-ci-sha-short: ${{ steps.prep.outputs.github-ci-sha-short }}
       github-ci-sha: ${{ steps.prep.outputs.github-ci-sha }}
+      aws-cli-version: ${{ steps.prep.outputs.aws-cli-version }}
 
     steps:
       - uses: actions/checkout@v3
@@ -54,6 +55,7 @@ jobs:
           echo "github-ci-sha-short=${CI_SHA_SHORT}" >> $GITHUB_OUTPUT
           echo "github-ci-sha=${CI_SHA}" >> $GITHUB_OUTPUT
           echo "github-ci-run-id=${CI_RUN_ID}" >> $GITHUB_OUTPUT
+          echo "aws-cli-version=${AWS_CLI_VERSION}" >> $GITHUB_OUTPUT
 
       - name: Fill "${{ steps.prep.outputs.phpcli-prd-docker-image-name }}" Docker Image metadata
         id: meta-phpcli-prd
@@ -114,6 +116,7 @@ jobs:
             VCS_REF_ARG=${{ needs.init.outputs.github-ci-sha }}
             BUILD_DATE_ARG=${{ needs.init.outputs.build-date }}
             NODE_VERSION_ARG=${{ needs.init.outputs.node-version }}
+            AWS_CLI_VERSION_ARG=${{ needs.init.outputs.aws-cli-version }}
           tags: ${{ needs.init.outputs.phpcli-prd-docker-image-tags }}
           labels: ${{ needs.init.outputs.phpcli-prd-docker-image-labels }}
           outputs: type=docker,dest=/tmp/phpcli-prd-builded.tar
@@ -132,6 +135,7 @@ jobs:
             VCS_REF_ARG=${{ needs.init.outputs.github-ci-sha }}
             BUILD_DATE_ARG=${{ needs.init.outputs.build-date }}
             NODE_VERSION_ARG=${{ needs.init.outputs.node-version }}
+            AWS_CLI_VERSION_ARG=${{ needs.init.outputs.aws-cli-version }}
           tags: ${{ needs.init.outputs.phpcli-dev-docker-image-tags }}
           labels: ${{ needs.init.outputs.phpcli-dev-docker-image-labels }}
           outputs: type=docker,dest=/tmp/phpcli-dev-builded.tar

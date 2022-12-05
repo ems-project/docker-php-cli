@@ -8,6 +8,7 @@ ARG VERSION_ARG
 ARG RELEASE_ARG
 ARG BUILD_DATE_ARG
 ARG VCS_REF_ARG
+ARG AWS_CLI_VERSION_ARG
 
 LABEL eu.elasticms.base-php-cli.build-date=$BUILD_DATE_ARG \
       eu.elasticms.base-php-cli.name="" \
@@ -25,7 +26,7 @@ USER root
 
 ENV MAIL_SMTP_SERVER="" \
     MAIL_FROM_DOMAIN="" \
-    AWS_CLI_VERSION=1.20.58 \
+    AWS_CLI_VERSION=${AWS_CLI_VERSION_ARG:-1.20.58} \
     AWS_CLI_DOWNLOAD_URL="https://github.com/aws/aws-cli/archive" \
     HOME=/home/default \
     PATH=/opt/bin:/usr/local/bin:/usr/bin:$PATH
