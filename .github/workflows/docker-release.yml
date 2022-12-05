@@ -17,10 +17,10 @@ jobs:
       version-major: ${{ steps.prep.outputs.version-major }}
       build-date: ${{ steps.prep.outputs.build-date }}
       node-version: ${{ steps.prep.outputs.node-version }}
-      phpcli-prd-docker-image-name: ${{ steps.prep.outputs.phpfpm-prd-docker-image-name }}
+      phpcli-prd-docker-image-name: ${{ steps.prep.outputs.phpcli-prd-docker-image-name }}
       phpcli-prd-docker-image-tags: ${{ steps.meta-phpcli-prd.outputs.tags }}
       phpcli-prd-docker-image-labels: ${{ steps.meta-phpcli-prd.outputs.labels }}
-      phpcli-dev-docker-image-name: ${{ steps.prep.outputs.phpfpm-dev-docker-image-name }}
+      phpcli-dev-docker-image-name: ${{ steps.prep.outputs.phpcli-dev-docker-image-name }}
       phpcli-dev-docker-image-tags: ${{ steps.meta-phpcli-dev.outputs.tags }}
       phpcli-dev-docker-image-labels: ${{ steps.meta-phpcli-dev.outputs.labels }}
       github-ci-run-id: ${{ steps.prep.outputs.github-ci-run-id }}
@@ -142,36 +142,36 @@ jobs:
           pip install docker-squash
 
       - name: Squash "${{ needs.init.outputs.phpcli-prd-docker-image-name }}" Docker Image
-        id: squash-phpfpm-prd
+        id: squash-phpcli-prd
         run: |
-          cat /tmp/phpfpm-prd-builded.tar | docker load
+          cat /tmp/phpcli-prd-builded.tar | docker load
           docker-squash --verbose --message "Build and Squashed in GitHub Action" \
             --tag ${{ needs.init.outputs.phpcli-prd-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }} \
-            --output-path /tmp/phpfpm-prd-squashed.tar \
+            --output-path /tmp/phpcli-prd-squashed.tar \
             --cleanup \
             ${{ needs.init.outputs.phpcli-prd-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }}
-          cat /tmp/phpfpm-prd-squashed.tar | docker load         
+          cat /tmp/phpcli-prd-squashed.tar | docker load         
           tags=$(echo "${{ needs.init.outputs.phpcli-prd-docker-image-tags }}" | tr "\n" " ")
           for tag in $tags; do
             docker tag ${{ needs.init.outputs.phpcli-prd-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }} $tag
           done
-          docker save --output /tmp/phpfpm-prd-final.tar $tags
+          docker save --output /tmp/phpcli-prd-final.tar $tags
 
       - name: Squash "${{ needs.init.outputs.phpcli-dev-docker-image-name }}" Docker Image
-        id: squash-phpfpm-dev
+        id: squash-phpcli-dev
         run: |
-          cat /tmp/phpfpm-dev-builded.tar | docker load
+          cat /tmp/phpcli-dev-builded.tar | docker load
           docker-squash --verbose --message "Build and Squashed in GitHub Action" \
             --tag ${{ needs.init.outputs.phpcli-dev-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }} \
-            --output-path /tmp/phpfpm-dev-squashed.tar \
+            --output-path /tmp/phpcli-dev-squashed.tar \
             --cleanup \
             ${{ needs.init.outputs.phpcli-dev-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }}
-          cat /tmp/phpfpm-dev-squashed.tar | docker load         
+          cat /tmp/phpcli-dev-squashed.tar | docker load         
           tags=$(echo "${{ needs.init.outputs.phpcli-dev-docker-image-tags }}" | tr "\n" " ")
           for tag in $tags; do
             docker tag ${{ needs.init.outputs.phpcli-dev-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }} $tag
           done
-          docker save --output /tmp/phpfpm-dev-final.tar $tags
+          docker save --output /tmp/phpcli-dev-final.tar $tags
 
       - name: Check Docker Images
         run: |
@@ -421,7 +421,7 @@ jobs:
       - name: Download Prod PHP artifact
         uses: actions/download-artifact@v3
         with:
-          name: phpfpm-prd
+          name: phpcli-prd
           path: /tmp
 
       - name: Load "${{ needs.init.outputs.phpcli-prd-docker-image-name }}" Docker image

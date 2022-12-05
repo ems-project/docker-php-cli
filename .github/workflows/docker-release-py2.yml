@@ -17,11 +17,7 @@ jobs:
       version-major: ${{ steps.prep.outputs.version-major }}
       build-date: ${{ steps.prep.outputs.build-date }}
       phpcli-prd-docker-image-name: ${{ steps.prep.outputs.phpcli-prd-docker-image-name }}
-      phpcli-prd-docker-image-tags: ${{ steps.meta-phpcli-prd.outputs.tags }}
-      phpcli-prd-docker-image-labels: ${{ steps.meta-phpcli-prd.outputs.labels }}
       phpcli-dev-docker-image-name: ${{ steps.prep.outputs.phpcli-dev-docker-image-name }}
-      phpcli-dev-docker-image-tags: ${{ steps.meta-phpcli-dev.outputs.tags }}
-      phpcli-dev-docker-image-labels: ${{ steps.meta-phpcli-dev.outputs.labels }}
       github-ci-run-id: ${{ steps.prep.outputs.github-ci-run-id }}
       github-ci-sha-short: ${{ steps.prep.outputs.github-ci-sha-short }}
       github-ci-sha: ${{ steps.prep.outputs.github-ci-sha }}
@@ -53,32 +49,6 @@ jobs:
           echo "github-ci-sha=${CI_SHA}" >> $GITHUB_OUTPUT
           echo "github-ci-run-id=${CI_RUN_ID}" >> $GITHUB_OUTPUT
 
-      - name: Fill "${{ steps.prep.outputs.phpcli-prd-docker-image-name }} ( py2-node${{ matrix.py2-node-version }} )" Docker Image metadata
-        id: meta-phpcli-prd
-        uses: docker/metadata-action@v4
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          images: "${{ steps.prep.outputs.phpcli-prd-docker-image-name }}"
-          tags: |
-            type=raw,value=${{ steps.prep.outputs.github-ci-sha-short }}-py2-node${{ matrix.py2-node-version }}
-            type=raw,value=${{ steps.prep.outputs.version-patch }}-py2-node${{ matrix.py2-node-version }}
-            type=raw,value=${{ steps.prep.outputs.version-minor }}-py2-node${{ matrix.py2-node-version }}
-            type=raw,value=${{ steps.prep.outputs.version-major }}-py2-node${{ matrix.py2-node-version }}
-            type=raw,value=latest
-
-      - name: Fill "${{ steps.prep.outputs.phpcli-dev-docker-image-name }} ( py2-node${{ matrix.py2-node-version }} )" Docker Image metadata
-        id: meta-phpcli-dev
-        uses: docker/metadata-action@v4
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          images: "${{ steps.prep.outputs.phpcli-dev-docker-image-name }}"
-          tags: |
-            type=raw,value=${{ steps.prep.outputs.github-ci-sha-short }}-py2-node${{ matrix.py2-node-version }}
-            type=raw,value=${{ steps.prep.outputs.version-patch }}-py2-node${{ matrix.py2-node-version }}
-            type=raw,value=${{ steps.prep.outputs.version-minor }}-py2-node${{ matrix.py2-node-version }}
-            type=raw,value=${{ steps.prep.outputs.version-major }}-py2-node${{ matrix.py2-node-version }}
-            type=raw,value=latest
-
   build:
 
     strategy:
@@ -102,6 +72,32 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-
 
+      - name: Fill "${{ needs.init.outputs.phpcli-prd-docker-image-name }} ( py2-node${{ matrix.py2-node-version }} )" Docker Image metadata
+        id: meta-phpcli-prd
+        uses: docker/metadata-action@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          images: "${{ needs.init.outputs.phpcli-prd-docker-image-name }}"
+          tags: |
+            type=raw,value=${{ needs.init.outputs.github-ci-sha-short }}-py2-node${{ matrix.py2-node-version }}
+            type=raw,value=${{ needs.init.outputs.version-patch }}-py2-node${{ matrix.py2-node-version }}
+            type=raw,value=${{ needs.init.outputs.version-minor }}-py2-node${{ matrix.py2-node-version }}
+            type=raw,value=${{ needs.init.outputs.version-major }}-py2-node${{ matrix.py2-node-version }}
+            type=raw,value=latest
+
+      - name: Fill "${{ needs.init.outputs.phpcli-dev-docker-image-name }} ( py2-node${{ matrix.py2-node-version }} )" Docker Image metadata
+        id: meta-phpcli-dev
+        uses: docker/metadata-action@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          images: "${{ needs.init.outputs.phpcli-dev-docker-image-name }}"
+          tags: |
+            type=raw,value=${{ needs.init.outputs.github-ci-sha-short }}-py2-node${{ matrix.py2-node-version }}
+            type=raw,value=${{ needs.init.outputs.version-patch }}-py2-node${{ matrix.py2-node-version }}
+            type=raw,value=${{ needs.init.outputs.version-minor }}-py2-node${{ matrix.py2-node-version }}
+            type=raw,value=${{ needs.init.outputs.version-major }}-py2-node${{ matrix.py2-node-version }}
+            type=raw,value=latest
+
       - name: Build "${{ needs.init.outputs.phpcli-prd-docker-image-name }} ( py2-node${{ matrix.py2-node-version }} )" Docker Image
         id: build-phpcli-prd
         uses: docker/build-push-action@v3
@@ -116,8 +112,8 @@ jobs:
             VCS_REF_ARG=${{ needs.init.outputs.github-ci-sha }}
             BUILD_DATE_ARG=${{ needs.init.outputs.build-date }}
             NODE_VERSION_ARG=${{ matrix.py2-node-version }}
-          tags: ${{ needs.init.outputs.phpcli-prd-docker-image-tags }}
-          labels: ${{ needs.init.outputs.phpcli-prd-docker-image-labels }}
+          tags: ${{ steps.meta-phpcli-prd.outputs.tags }}
+          labels: ${{ steps.meta-phpcli-prd.outputs.labels }}
           outputs: type=docker,dest=/tmp/phpcli-prd-py2-node${{ matrix.py2-node-version }}-builded.tar
 
       - name: Build "${{ needs.init.outputs.phpcli-dev-docker-image-name }} ( py2-node${{ matrix.py2-node-version }} )" Docker Image
@@ -134,8 +130,8 @@ jobs:
             VCS_REF_ARG=${{ needs.init.outputs.github-ci-sha }}
             BUILD_DATE_ARG=${{ needs.init.outputs.build-date }}
             NODE_VERSION_ARG=${{ matrix.py2-node-version }}
-          tags: ${{ needs.init.outputs.phpcli-dev-docker-image-tags }}
-          labels: ${{ needs.init.outputs.phpcli-dev-docker-image-labels }}
+          tags: ${{ steps.meta-phpcli-dev.outputs.tags }}
+          labels: ${{ steps.meta-phpcli-prd.outputs.labels }}
           outputs: type=docker,dest=/tmp/phpcli-dev-py2-node${{ matrix.py2-node-version }}-builded.tar
 
       - name: Install Docker Squash
@@ -153,7 +149,7 @@ jobs:
             --cleanup \
             ${{ needs.init.outputs.phpcli-prd-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }}
           cat /tmp/phpcli-prd-py2-node${{ matrix.py2-node-version }}-squashed.tar | docker load         
-          tags=$(echo "${{ needs.init.outputs.phpcli-prd-docker-image-tags }}" | tr "\n" " ")
+          tags=$(echo "${{ steps.meta-phpcli-dev.outputs.tags }}" | tr "\n" " ")
           for tag in $tags; do
             docker tag ${{ needs.init.outputs.phpcli-prd-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }} $tag
           done
@@ -169,7 +165,7 @@ jobs:
             --cleanup \
             ${{ needs.init.outputs.phpcli-dev-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }}
           cat /tmp/phpcli-dev-py2-node${{ matrix.py2-node-version }}-squashed.tar | docker load         
-          tags=$(echo "${{ needs.init.outputs.phpcli-dev-docker-image-tags }}" | tr "\n" " ")
+          tags=$(echo "${{ steps.meta-phpcli-dev.outputs.labels }}" | tr "\n" " ")
           for tag in $tags; do
             docker tag ${{ needs.init.outputs.phpcli-dev-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }} $tag
           done
