@@ -261,7 +261,7 @@ jobs:
           docker pull appropriate/curl:latest
           bats -r test/tests.bats
 
-  sign:
+  push:
 
     strategy:
       matrix:
@@ -300,85 +300,18 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      - name: Sign and push docker image "${{ needs.init.outputs.phpcli-prd-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }}-py2-node${{ matrix.py2-node-version }}"
-        uses: sudo-bot/action-docker-sign@latest
-        with:
-          image-ref: "${{ needs.init.outputs.phpcli-prd-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }}-py2-node${{ matrix.py2-node-version }}"
-          private-key-id: "${{ secrets.DOCKER_PRIVATE_KEY_ID }}"
-          private-key: ${{ secrets.DOCKER_PRIVATE_KEY }}
-          private-key-passphrase: ${{ secrets.DOCKER_PRIVATE_KEY_PASSPHRASE }}
-
-      - name: Sign and push docker image "${{ needs.init.outputs.phpcli-prd-docker-image-name }}:${{ needs.init.outputs.version-patch }}-py2-node${{ matrix.py2-node-version }}"
-        uses: sudo-bot/action-docker-sign@latest
-        with:
-          image-ref: "${{ needs.init.outputs.phpcli-prd-docker-image-name }}:${{ needs.init.outputs.version-patch }}-py2-node${{ matrix.py2-node-version }}"
-          private-key-id: "${{ secrets.DOCKER_PRIVATE_KEY_ID }}"
-          private-key: ${{ secrets.DOCKER_PRIVATE_KEY }}
-          private-key-passphrase: ${{ secrets.DOCKER_PRIVATE_KEY_PASSPHRASE }}
-
-      - name: Sign and push docker image "${{ needs.init.outputs.phpcli-prd-docker-image-name }}:${{ needs.init.outputs.version-minor }}-py2-node${{ matrix.py2-node-version }}"
-        uses: sudo-bot/action-docker-sign@latest
-        with:
-          image-ref: "${{ needs.init.outputs.phpcli-prd-docker-image-name }}:${{ needs.init.outputs.version-minor }}-py2-node${{ matrix.py2-node-version }}"
-          private-key-id: "${{ secrets.DOCKER_PRIVATE_KEY_ID }}"
-          private-key: ${{ secrets.DOCKER_PRIVATE_KEY }}
-          private-key-passphrase: ${{ secrets.DOCKER_PRIVATE_KEY_PASSPHRASE }}
-
-      - name: Sign and push docker image "${{ needs.init.outputs.phpcli-prd-docker-image-name }}:${{ needs.init.outputs.version-major }}-py2-node${{ matrix.py2-node-version }}"
-        uses: sudo-bot/action-docker-sign@latest
-        with:
-          image-ref: "${{ needs.init.outputs.phpcli-prd-docker-image-name }}:${{ needs.init.outputs.version-major }}-py2-node${{ matrix.py2-node-version }}"
-          private-key-id: "${{ secrets.DOCKER_PRIVATE_KEY_ID }}"
-          private-key: ${{ secrets.DOCKER_PRIVATE_KEY }}
-          private-key-passphrase: ${{ secrets.DOCKER_PRIVATE_KEY_PASSPHRASE }}
-
-      - name: Sign and push docker image "${{ needs.init.outputs.phpcli-prd-docker-image-name }}:latest"
-        uses: sudo-bot/action-docker-sign@latest
-        with:
-          image-ref: "${{ needs.init.outputs.phpcli-prd-docker-image-name }}:latest"
-          private-key-id: "${{ secrets.DOCKER_PRIVATE_KEY_ID }}"
-          private-key: ${{ secrets.DOCKER_PRIVATE_KEY }}
-          private-key-passphrase: ${{ secrets.DOCKER_PRIVATE_KEY_PASSPHRASE }}
-
-      - name: Sign and push docker image "${{ needs.init.outputs.phpcli-dev-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }}-py2-node${{ matrix.py2-node-version }}"
-        uses: sudo-bot/action-docker-sign@latest
-        with:
-          image-ref: "${{ needs.init.outputs.phpcli-dev-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }}-py2-node${{ matrix.py2-node-version }}"
-          private-key-id: "${{ secrets.DOCKER_PRIVATE_KEY_ID }}"
-          private-key: ${{ secrets.DOCKER_PRIVATE_KEY }}
-          private-key-passphrase: ${{ secrets.DOCKER_PRIVATE_KEY_PASSPHRASE }}
-
-      - name: Sign and push docker image "${{ needs.init.outputs.phpcli-dev-docker-image-name }}:${{ needs.init.outputs.version-patch }}-py2-node${{ matrix.py2-node-version }}"
-        uses: sudo-bot/action-docker-sign@latest
-        with:
-          image-ref: "${{ needs.init.outputs.phpcli-dev-docker-image-name }}:${{ needs.init.outputs.version-patch }}-py2-node${{ matrix.py2-node-version }}"
-          private-key-id: "${{ secrets.DOCKER_PRIVATE_KEY_ID }}"
-          private-key: ${{ secrets.DOCKER_PRIVATE_KEY }}
-          private-key-passphrase: ${{ secrets.DOCKER_PRIVATE_KEY_PASSPHRASE }}
-
-      - name: Sign and push docker image "${{ needs.init.outputs.phpcli-dev-docker-image-name }}:${{ needs.init.outputs.version-minor }}-py2-node${{ matrix.py2-node-version }}"
-        uses: sudo-bot/action-docker-sign@latest
-        with:
-          image-ref: "${{ needs.init.outputs.phpcli-dev-docker-image-name }}:${{ needs.init.outputs.version-minor }}-py2-node${{ matrix.py2-node-version }}"
-          private-key-id: "${{ secrets.DOCKER_PRIVATE_KEY_ID }}"
-          private-key: ${{ secrets.DOCKER_PRIVATE_KEY }}
-          private-key-passphrase: ${{ secrets.DOCKER_PRIVATE_KEY_PASSPHRASE }}
-
-      - name: Sign and push docker image "${{ needs.init.outputs.phpcli-dev-docker-image-name }}:${{ needs.init.outputs.version-major }}-py2-node${{ matrix.py2-node-version }}"
-        uses: sudo-bot/action-docker-sign@latest
-        with:
-          image-ref: "${{ needs.init.outputs.phpcli-dev-docker-image-name }}:${{ needs.init.outputs.version-major }}-py2-node${{ matrix.py2-node-version }}"
-          private-key-id: "${{ secrets.DOCKER_PRIVATE_KEY_ID }}"
-          private-key: ${{ secrets.DOCKER_PRIVATE_KEY }}
-          private-key-passphrase: ${{ secrets.DOCKER_PRIVATE_KEY_PASSPHRASE }}
-
-      - name: Sign and push docker image "${{ needs.init.outputs.phpcli-dev-docker-image-name }}:latest"
-        uses: sudo-bot/action-docker-sign@latest
-        with:
-          image-ref: "${{ needs.init.outputs.phpcli-dev-docker-image-name }}:latest"
-          private-key-id: "${{ secrets.DOCKER_PRIVATE_KEY_ID }}"
-          private-key: ${{ secrets.DOCKER_PRIVATE_KEY }}
-          private-key-passphrase: ${{ secrets.DOCKER_PRIVATE_KEY_PASSPHRASE }}
+      - name: Push Docker images
+        run: |
+          docker push ${{ needs.init.outputs.phpcli-prd-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }}-py2-node${{ matrix.py2-node-version }}
+          docker push ${{ needs.init.outputs.phpcli-prd-docker-image-name }}:${{ needs.init.outputs.version-patch }}-py2-node${{ matrix.py2-node-version }}
+          docker push ${{ needs.init.outputs.phpcli-prd-docker-image-name }}:${{ needs.init.outputs.version-minor }}-py2-node${{ matrix.py2-node-version }}
+          docker push ${{ needs.init.outputs.phpcli-prd-docker-image-name }}:${{ needs.init.outputs.version-major }}-py2-node${{ matrix.py2-node-version }}
+          docker push ${{ needs.init.outputs.phpcli-prd-docker-image-name }}:latest
+          docker push ${{ needs.init.outputs.phpcli-dev-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }}-py2-node${{ matrix.py2-node-version }}
+          docker push ${{ needs.init.outputs.phpcli-dev-docker-image-name }}:${{ needs.init.outputs.version-patch }}-py2-node${{ matrix.py2-node-version }}
+          docker push ${{ needs.init.outputs.phpcli-dev-docker-image-name }}:${{ needs.init.outputs.version-minor }}-py2-node${{ matrix.py2-node-version }}
+          docker push ${{ needs.init.outputs.phpcli-dev-docker-image-name }}:${{ needs.init.outputs.version-major }}-py2-node${{ matrix.py2-node-version }}
+          docker push ${{ needs.init.outputs.phpcli-dev-docker-image-name }}:latest
 
       - name: Check Docker Images pull's
         run: |
@@ -418,7 +351,7 @@ jobs:
   cleanup:
 
     runs-on: ubuntu-20.04
-    needs: [sign]
+    needs: [push]
     steps:
       - uses: joutvhu/delete-artifact@v1
         with:
