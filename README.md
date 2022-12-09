@@ -2,6 +2,8 @@
 
 Docker base image is the basic image on which you add layers (which are basically filesystem changes) and create a final image containing your App.  
 
+## Build
+
 ```
 set -a
 source .build.env
@@ -24,5 +26,19 @@ docker build --build-arg VERSION_ARG=${PHP_VERSION} \
              --build-arg VCS_REF_ARG="" \
              --target php-cli-dev \
              -t ${PHPCLI_DEV_DOCKER_IMAGE_NAME}:latest .
+
+```
+
+## Test 
+
+```
+set -a
+source .build.env
+set +a
+
+bats test/tests.bats
+
+PHP_DOCKER_IMAGE_NAME=docker.io/elasticms/base-php-cli-dev:latest
+bats test/tests.bats
 
 ```
