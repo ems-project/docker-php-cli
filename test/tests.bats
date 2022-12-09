@@ -8,9 +8,14 @@ load "lib/output"
 
 export BATS_PHP_VERSION="${PHP_VERSION:-7.4.26}"
 
-export BATS_PHP_DOCKER_IMAGE_NAME="${PHP_DOCKER_IMAGE_NAME:-docker.io/elasticms/web2ems:latest}"
+export BATS_PHP_DOCKER_IMAGE_NAME="${PHP_DOCKER_IMAGE_NAME:-docker.io/elasticms/base-php-cli:latest}"
 
-@test "[$TEST_FILE] Starting LAMP stack services (apache,mysql,php)" {
+@test "[$TEST_FILE] Testing PHP Version" {
   run docker run --rm ${BATS_PHP_DOCKER_IMAGE_NAME} -v
   assert_output -l -r "^PHP ${BATS_PHP_VERSION} \(cli\) \(.*\) \( NTS \)"
+}
+
+@test "[$TEST_FILE] Testing NPM Version (with unrecognized uid)" {
+  run docker run -u 1000 --rm ${BATS_PHP_DOCKER_IMAGE_NAME} npm -v
+  assert_output -l -r "^[0-9]+.[0-9]+.[0-9]+*$"
 }

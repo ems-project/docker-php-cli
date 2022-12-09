@@ -265,6 +265,13 @@ jobs:
           docker pull appropriate/curl:latest
           bats -r test/tests.bats
 
+      - name: Test "${{ needs.init.outputs.phpcli-dev-docker-image-name }}" Docker Image
+        env:
+          PHP_DOCKER_IMAGE_NAME: ${{ needs.init.outputs.phpcli-dev-docker-image-name }}:${{ needs.init.outputs.github-ci-sha-short }}
+          PHP_VERSION: ${{ needs.init.outputs.version-patch }}
+        run: |
+          bats -r test/tests.bats
+
   sign:
 
     runs-on: ubuntu-20.04
