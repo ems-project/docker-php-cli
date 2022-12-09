@@ -38,7 +38,7 @@ COPY --from=node /usr/local/include /usr/local/include
 COPY --from=node /usr/local/bin /usr/local/bin
 
 COPY --chmod=775 --chown=1001:0 etc/php/ /usr/local/etc/
-COPY --chmod=775 --chown=1001:0 etc/ssmtp/ /etc/ssmtp/
+COPY --chmod=777 --chown=1001:0 etc/ssmtp/ /etc/ssmtp/
 COPY --chmod=775 --chown=1001:0 bin/ /usr/local/bin/
 
 RUN mkdir -p /home/default /opt/etc /opt/src /var/lock \
