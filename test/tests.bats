@@ -14,3 +14,8 @@ export BATS_PHP_DOCKER_IMAGE_NAME="${PHP_DOCKER_IMAGE_NAME:-docker.io/elasticms/
   run docker run --rm ${BATS_PHP_DOCKER_IMAGE_NAME} -v
   assert_output -l -r "^PHP ${BATS_PHP_VERSION} \(cli\) \(.*\) \( NTS \)"
 }
+
+@test "[$TEST_FILE] Testing NPM Version (with unrecognized uid)" {
+  run docker run -u 1000 --rm ${BATS_PHP_DOCKER_IMAGE_NAME} npm -v
+  assert_output -l -r "^[0-9]+.[0-9]+.[0-9]+*$"
+}
