@@ -53,9 +53,9 @@ RUN mkdir -p /home/default /opt/etc /opt/src /var/lock \
     && docker-php-ext-install -j "$(nproc)" soap bz2 fileinfo gettext intl pcntl pgsql \
                                             pdo_pgsql simplexml ldap gd ldap mysqli pdo_mysql \
                                             zip opcache bcmath exif tidy xsl \
-    && pecl install APCu-5.1.19 \
-    && pecl install redis-5.3.1 \
-    && docker-php-ext-enable apcu redis \
+    && pecl install APCu-5.1.21 \
+    && pecl install redis-5.3.7 \
+    && docker-php-ext-enable apcu redis opcache \
     && runDeps="$( \
        scanelf --needed --nobanner --format '%n#p' --recursive /usr/local/lib/php/extensions \
        | tr ',' '\n' \
@@ -65,9 +65,8 @@ RUN mkdir -p /home/default /opt/etc /opt/src /var/lock \
     && apk add --update --no-cache --virtual .ems-phpext-rundeps $runDeps \
     && apk add --update --upgrade --no-cache --virtual .ems-rundeps tzdata \
                                       bash gettext ssmtp postgresql-client postgresql-libs \
-                                      libjpeg-turbo freetype libpng libwebp libxpm mailx coreutils \
-                                      mysql-client jq icu-libs python3 py3-pip groff tidyhtml \
-                                      libxslt \
+                                      libjpeg-turbo freetype libpng libwebp libxpm mailx coreutils libxslt \
+                                      mysql-client jq icu-libs libxml2 python3 py3-pip groff tidyhtml \
     && cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
     && echo "Setup timezone ..." \
     && cp /usr/share/zoneinfo/Europe/Brussels /etc/localtime \
@@ -101,7 +100,7 @@ FROM php-cli-prod AS php-cli-dev
 USER root
 
 RUN echo "Install and Configure required extra PHP packages ..." \
-    && apk add --update --no-cache --virtual .build-deps $PHPIZE_DEPS autoconf \
+    && apk add --update --no-cache --virtual .build-deps $PHPIZE_DEPS autoconf linux-headers \
     && pecl install xdebug \
     && docker-php-ext-enable xdebug \
     && runDeps="$( \
