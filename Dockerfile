@@ -31,6 +31,8 @@ ENV MAIL_SMTP_SERVER="" \
     HOME=/home/default \
     PATH=/opt/bin:/usr/local/bin:/usr/bin:$PATH
 
+COPY --from=hairyhenderson/gomplate:stable /gomplate /usr/bin/gomplate
+
 COPY --from=node /usr/lib /usr/lib
 COPY --from=node /usr/local/share /usr/local/share
 COPY --from=node /usr/local/lib /usr/local/lib
@@ -38,7 +40,7 @@ COPY --from=node /usr/local/include /usr/local/include
 COPY --from=node /usr/local/bin /usr/local/bin
 
 COPY --chmod=775 --chown=1001:0 etc/php/ /usr/local/etc/
-COPY --chmod=775 --chown=1001:0 etc/ssmtp/ /etc/ssmtp/
+COPY --chmod=775 --chown=1001:0 etc/ssmtp/ /opt/etc/ssmtp/
 COPY --chmod=775 --chown=1001:0 bin/ /usr/local/bin/
 
 RUN mkdir -p /home/default /opt/etc /opt/src /var/lock \
@@ -89,7 +91,7 @@ RUN mkdir -p /home/default /opt/etc /opt/src /var/lock \
     && apk del .build-deps \
     && rm -rf /var/cache/apk/* \
     && echo "Setup permissions on filesystem for non-privileged user ..." \
-    && chown -Rf 1001:0 /home/default /opt /var/lock \
+    && chown -Rf 1001:0 /home/default /opt /etc/ssmtp /var/lock \
     && chmod -R ug+rw /home/default /opt /etc/ssmtp \
     && find /opt -type d -exec chmod ug+x {} \; \
     && find /var/lock -type d -exec chmod ug+x {} \; 
