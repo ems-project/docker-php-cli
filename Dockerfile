@@ -74,7 +74,7 @@ RUN mkdir -p /home/default /opt/etc /opt/src /var/lock \
     && cp /usr/share/zoneinfo/Europe/Brussels /etc/localtime \
     && echo "Europe/Brussels" > /etc/timezone \
     && echo "Add non-privileged user ..." \
-    && adduser -D -u 1001 -g default -s /sbin/nologin default \
+    && adduser -D -u 1001 -g default -G root -s /sbin/nologin default \
     && echo "Configure OpCache ..." \
     && echo 'opcache.memory_consumption=128' > /usr/local/etc/php/conf.d/opcache-recommended.ini \
     && echo 'opcache.interned_strings_buffer=8' >> /usr/local/etc/php/conf.d/opcache-recommended.ini \
